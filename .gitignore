@@ -1,0 +1,10 @@
+# Runtime data (generated on TrueNAS)
+data/
+output/
+gluetun/
+
+# Environment secrets
+.env
+
+# BetterDeob tool (copy separately)
+better-deob/

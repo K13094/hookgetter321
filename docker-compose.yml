@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  # VPN container - routes all hook service traffic through IPVanish
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: osrs-hooks-vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=ipvanish
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=${IPVANISH_USER}
+      - OPENVPN_PASSWORD=${IPVANISH_PASS}
+      # Server selection (optional - defaults to automatic)
+      - SERVER_COUNTRIES=${IPVANISH_COUNTRY:-United States}
+    volumes:
+      - ./gluetun:/gluetun
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  osrs-hooks:
+    build: .
+    container_name: osrs-hook-service
+    restart: unless-stopped
+    # Route all traffic through VPN container
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
+    volumes:
+      # All data accessible from host
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./better-deob:/app/better-deob
+      - ./scripts:/app/scripts
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
