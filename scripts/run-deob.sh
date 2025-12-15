@@ -8,7 +8,14 @@ echo "[DEOB] Input: /app/data/gamepack.jar"
 echo "[DEOB] Output: /app/output"
 
 # BetterDeob uses --in and --out (not -i and -o)
-./gradlew run --no-daemon --args="--in /app/data/gamepack.jar --out /app/output" 2>&1
+# Also pass --rules if a rules file exists
+if [ -f "src/main/resources/osrs-rules.yaml" ]; then
+    echo "[DEOB] Using rules file: src/main/resources/osrs-rules.yaml"
+    ./gradlew run --no-daemon --args="--in /app/data/gamepack.jar --out /app/output --rules src/main/resources/osrs-rules.yaml" 2>&1
+else
+    echo "[DEOB] No rules file found, running without rules"
+    ./gradlew run --no-daemon --args="--in /app/data/gamepack.jar --out /app/output" 2>&1
+fi
 
 if [ $? -eq 0 ]; then
     echo "[DEOB] Deobfuscation complete!"
