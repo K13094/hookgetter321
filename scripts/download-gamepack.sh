@@ -11,8 +11,14 @@ RETRY_DELAY=5
 for i in $(seq 1 $MAX_RETRIES); do
     echo "[DOWNLOAD] Fetching jav_config from: $JAV_CONFIG_URL (attempt $i/$MAX_RETRIES)"
 
-    # Fetch jav_config (follow redirects with -L, 10s timeout)
-    JAV_CONFIG=$(curl -sL --connect-timeout 10 --max-time 30 "$JAV_CONFIG_URL")
+    # Fetch jav_config (follow redirects with -L, 10s timeout, no caching)
+    JAV_CONFIG=$(curl -sL \
+        -H "Cache-Control: no-cache, no-store, must-revalidate" \
+        -H "Pragma: no-cache" \
+        -H "Expires: 0" \
+        --connect-timeout 10 \
+        --max-time 30 \
+        "$JAV_CONFIG_URL")
 
     # Parse jav_config to get gamepack URL
     CODEBASE=$(echo "$JAV_CONFIG" | grep "codebase=" | cut -d'=' -f2 | tr -d '\r')
@@ -35,8 +41,22 @@ done
 
 GAMEPACK_URL="${CODEBASE}${INITIAL_JAR}"
 
+# Delete old gamepack to ensure fresh download
+if [ -f "$GAMEPACK_PATH" ]; then
+    echo "[DOWNLOAD] Removing old gamepack..."
+    rm -f "$GAMEPACK_PATH"
+fi
+
 echo "[DOWNLOAD] Fetching gamepack from: $GAMEPACK_URL"
-curl -sL -o "$GAMEPACK_PATH" "$GAMEPACK_URL"
+# Use cache-busting headers to prevent cached responses
+curl -sL \
+    -H "Cache-Control: no-cache, no-store, must-revalidate" \
+    -H "Pragma: no-cache" \
+    -H "Expires: 0" \
+    --connect-timeout 10 \
+    --max-time 60 \
+    -o "$GAMEPACK_PATH" \
+    "$GAMEPACK_URL"
 
 if [ -f "$GAMEPACK_PATH" ]; then
     SIZE=$(stat -c%s "$GAMEPACK_PATH" 2>/dev/null || stat -f%z "$GAMEPACK_PATH" 2>/dev/null)
