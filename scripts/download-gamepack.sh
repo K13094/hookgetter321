@@ -43,8 +43,21 @@ GAMEPACK_URL="${CODEBASE}${INITIAL_JAR}"
 
 # Delete old gamepack to ensure fresh download
 if [ -f "$GAMEPACK_PATH" ]; then
+    OLD_SHA=$(sha256sum "$GAMEPACK_PATH" 2>/dev/null | cut -d' ' -f1)
+    echo "[DOWNLOAD] Old gamepack SHA: ${OLD_SHA:0:16}..."
     echo "[DOWNLOAD] Removing old gamepack..."
     rm -f "$GAMEPACK_PATH"
+    sync
+    sleep 1
+    # Verify deletion
+    if [ -f "$GAMEPACK_PATH" ]; then
+        echo "[DOWNLOAD] WARNING: Failed to delete old gamepack!"
+        ls -la "$GAMEPACK_PATH"
+    else
+        echo "[DOWNLOAD] Old gamepack deleted successfully"
+    fi
+else
+    echo "[DOWNLOAD] No existing gamepack to delete"
 fi
 
 echo "[DOWNLOAD] Fetching gamepack from: $GAMEPACK_URL"
@@ -61,7 +74,9 @@ curl -sL \
 if [ -f "$GAMEPACK_PATH" ]; then
     SIZE=$(stat -c%s "$GAMEPACK_PATH" 2>/dev/null || stat -f%z "$GAMEPACK_PATH" 2>/dev/null)
     if [ "$SIZE" -gt 1000 ]; then
+        NEW_SHA=$(sha256sum "$GAMEPACK_PATH" | cut -d' ' -f1)
         echo "[DOWNLOAD] Downloaded gamepack.jar (${SIZE} bytes)"
+        echo "[DOWNLOAD] New gamepack SHA: ${NEW_SHA:0:16}..."
     else
         echo "[DOWNLOAD] ERROR: Downloaded file too small (${SIZE} bytes)"
         exit 1
