@@ -26,7 +26,7 @@ services:
         max-file: "2"
 
   osrs-hooks:
-    build: https://github.com/K13094/osrshookgetter.git
+    image: ghcr.io/k13094/osrshookgetter:latest
     container_name: osrs-hook-service
     restart: unless-stopped
     # Route all traffic through VPN container
