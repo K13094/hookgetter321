@@ -10,11 +10,9 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy BetterDeob project
-COPY better-deob/ /app/better-deob/
-
-# Build BetterDeob once during image build
-RUN cd /app/better-deob && ./gradlew build --no-daemon
+# Clone and build BetterDeob from GitHub
+RUN git clone https://github.com/K13094/better-deob.git /app/better-deob && \
+    cd /app/better-deob && ./gradlew build --no-daemon
 
 # Copy scripts
 COPY scripts/ /app/scripts/
