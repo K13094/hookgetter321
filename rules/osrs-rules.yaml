@@ -932,18 +932,6 @@ fieldRules:
         min: 9
         weight: 0.5
 
-  # widgetPositionsY - Widget Y positions
-  - id: Client.widgetPositionsY
-    ownerTarget: Client
-    desc: "[I"
-    isStatic: true
-    threshold: 0.40
-    signals:
-      - kind: readMin
-        min: 22
-        weight: 0.5
-      - kind: writeMin
-        min: 10
         weight: 0.5
 
   # mapDotPlayers/mapDotNpcs - Removed, no matching candidates
@@ -9900,6 +9888,688 @@ fieldRules:
       - kind: readMin
         min: 40
         weight: 1.0
+
+  # ============================================================
+  # Test 226 - Agent recommended high-signal fields
+  # ============================================================
+
+  # Client fields with high intMultiplierConstAny (agent 1)
+  - id: Client.clientQueueIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.4
+      - kind: writeMin
+        min: 8
+        weight: 0.3
+      - kind: intMultiplierConstAny
+        min: 50
+        weight: 0.3
+
+  - id: Client.clientOrbX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.4
+      - kind: writeMin
+        min: 6
+        weight: 0.3
+      - kind: intMultiplierConstAny
+        min: 45
+        weight: 0.3
+
+  # NPC additional fields (agent 2 - NPC has low coverage)
+  - id: NPC.npcDefinition
+    ownerTarget: NPC
+    desc: "Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # ItemDefinition unmapped fields (agent 3)
+  - id: ItemDefinition.itemDefinitionWeight
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.5
+
+  # NPCDefinition array field
+  - id: NPCDefinition.npcDefinitionModelIds
+    ownerTarget: NPCDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ============================================================
+  # Test 227 - More agent recommended fields
+  # ============================================================
+
+  # More Client high-signal fields
+  - id: Client.clientRenderFlags
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 13
+        weight: 0.6
+      - kind: writeMin
+        min: 4
+        weight: 0.4
+
+  - id: Client.clientHitsplatCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  - id: Client.clientMainBuffer
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  - id: Client.clientInputType
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.7
+      - kind: intMultiplierConstAny
+        min: 15
+        weight: 0.3
+
+  # ============================================================
+  # Test 231 - Very high readMin fields (less competition)
+  # ============================================================
+
+  # Client fields with high read counts
+  - id: Client.clientCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 90
+        weight: 1.0
+
+  # Node chain fields with high reads
+  - id: Node.nodeNext
+    ownerTarget: Node
+    desc: "Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 50
+        weight: 1.0
+
+  - id: Node.nodePrevious
+    ownerTarget: Node
+    desc: "Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 40
+        weight: 1.0
+
+  # ============================================================
+  # Test 233 - Target underexplored classes
+  # ============================================================
+
+  # AbstractArchive fields
+  - id: AbstractArchive.archiveBuffer
+    ownerTarget: AbstractArchive
+    desc: "[[B"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.7
+      - kind: writeMin
+        min: 3
+        weight: 0.3
+
+  # Sprite instance fields
+  - id: Sprite.spriteOffsetX
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: intMultiplierConstAny
+        min: 5
+        weight: 0.4
+
+  - id: Sprite.spriteOffsetY
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: intMultiplierConstAny
+        min: 5
+        weight: 0.4
+
+  # Projectile instance booleans
+  - id: Projectile.projectileRotate
+    ownerTarget: Projectile
+    desc: "Z"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # VarbitDefinition fields
+  - id: VarbitDefinition.varbitBaseVar
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # ============================================================
+  # Test 234 - More instance fields
+  # ============================================================
+
+  # Scene instance arrays
+  - id: Scene.sceneTiles
+    ownerTarget: Scene
+    desc: "[[[Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 1.0
+
+  # ObjectDefinition boolean
+  - id: ObjectDefinition.objectDefinitionImpenetrable
+    ownerTarget: ObjectDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # NPCDefinition boolean
+  - id: NPCDefinition.npcDefinitionClickable
+    ownerTarget: NPCDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ============================================================
+  # Test 236 - Push to 550
+  # ============================================================
+
+  # Font additional fields
+  - id: Font.fontKernWidths
+    ownerTarget: Font
+    desc: "[[B"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  # TextureProvider additional
+  - id: TextureProvider.textureCount
+    ownerTarget: TextureProvider
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.4
+
+  # ============================================================
+  # Test 238 - More safe rules
+  # ============================================================
+
+  # Tile instance fields
+  - id: Tile.tileWallDecoration
+    ownerTarget: Tile
+    desc: "Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # ============================================================
+  # Test 240 - Client static arrays (agent recommended)
+  # ============================================================
+
+  # High-confidence Client arrays
+  - id: Client.clientWidgetIdArray
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  - id: Client.clientNpcScreenPosX
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  - id: Client.clientNpcScreenPosY
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  - id: Client.clientProjectileX
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  - id: Client.clientGroundItemX
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # OverlayDefinition unmapped fields
+  - id: OverlayDefinition.overlaySecondaryColor
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 10
+        weight: 0.5
+
+  - id: OverlayDefinition.overlayTernaryColor
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 8
+        weight: 0.5
+
+  # UnderlayDefinition unmapped fields
+  - id: UnderlayDefinition.underlayHueSaturation
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.5
+
+  # ============================================================
+  # Test 242 - Only safe rules (Model/ItemDefinition)
+  # ============================================================
+
+  # Model vertex arrays (Agent 2 recommendation)
+  - id: Model.modelVertexYBuffer
+    ownerTarget: Model
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: Model.modelVertexZBuffer
+    ownerTarget: Model
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  # ItemDefinition unmapped (Agent 3)
+  - id: ItemDefinition.itemDefinitionModelRotationY
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.5
+
+  # ============================================================
+  # Test 244 - More Definition and unique descriptors
+  # ============================================================
+
+  # ObjectDefinition unmapped
+  - id: ObjectDefinition.objectDefinitionConfigFlag
+    ownerTarget: ObjectDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: writeMin
+        min: 1
+        weight: 1.0
+
+  # AnimationSequence unmapped arrays
+  - id: AnimationSequence.animationUnknownArray
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: writeMin
+        min: 1
+        weight: 1.0
+
+  # Tile additional field (safe)
+  - id: Tile.tileX
+    ownerTarget: Tile
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.4
+
+  # ============================================================
+
+  # Test 252 - Rare descriptor fields
+  # ============================================================
+
+  # CollisionMap [[I (2D int array) - try static
+  - id: CollisionMap.collisionFlagsStatic
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # Scene has [[[I (3D int array) field
+  - id: Scene.sceneTileHeights
+    ownerTarget: Scene
+    desc: "[[[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # Test 255 - Zero-mapped classes (safe - nothing to displace)
+  # ============================================================
+
+  # AbstractArchive - try static I fields
+  - id: AbstractArchive.archiveStaticInt1
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt2
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt3
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # More AbstractArchive static int fields
+  - id: AbstractArchive.archiveStaticInt4
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt5
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: writeMin
+        min: 1
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt6
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 1.0
+
+
+  - id: AbstractArchive.archiveStaticInt10
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt11
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 9
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt12
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt13
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 11
+        weight: 1.0
+
+  - id: AbstractArchive.archiveStaticInt14
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 1.0
+
+  # Try second CollisionMap [[I field
+  - id: CollisionMap.collisionFlagsStatic2
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+
+
 
 
 
