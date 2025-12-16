@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git log:*)",
+      "Bash(/dev/null -exec grep -l \"oldschool\\|jagex\\|jav_config\" {})",
+      "Bash(curl:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
