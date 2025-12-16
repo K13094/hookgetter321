@@ -8,7 +8,7 @@ echo "[DEOB] Input: /app/data/gamepack.jar"
 echo "[DEOB] Output: /app/output"
 
 # Fetch latest rules from GitHub
-RULES_URL="https://raw.githubusercontent.com/K13094/hookgetter321/main/better-deob/src/main/resources/osrs-rules.yaml"
+RULES_URL="https://raw.githubusercontent.com/K13094/hookgetter321/main/rules/osrs-rules.yaml"
 RULES_FILE="/app/data/osrs-rules.yaml"
 
 echo "[DEOB] Fetching latest rules from GitHub..."
