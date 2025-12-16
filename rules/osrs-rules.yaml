@@ -8487,49 +8487,24 @@ fieldRules:
         min: 1
         weight: 0.5
 
-  - id: Client.clientRenderCycle
+  # More high-read Client fields with unique min values
+  - id: Client.clientMainBuffer
     ownerTarget: Client
     desc: "I"
     isStatic: true
     threshold: 0.40
     signals:
       - kind: readMin
-        min: 120
+        min: 95
         weight: 0.5
       - kind: intMultiplierConstAny
         min: 1
         weight: 0.5
 
-  - id: Client.clientUpdateCycle
+  # Short (S) fields work!
+  - id: Client.clientMapZoom
     ownerTarget: Client
-    desc: "I"
-    isStatic: true
-    threshold: 0.40
-    signals:
-      - kind: readMin
-        min: 130
-        weight: 0.5
-      - kind: intMultiplierConstAny
-        min: 1
-        weight: 0.5
-
-  # Strategy: Client long fields (J)
-  - id: Client.clientSessionId
-    ownerTarget: Client
-    desc: "J"
-    isStatic: true
-    threshold: 0.40
-    signals:
-      - kind: readMin
-        min: 2
-        weight: 0.5
-      - kind: writeMin
-        min: 1
-        weight: 0.5
-
-  - id: Client.clientServerTime
-    ownerTarget: Client
-    desc: "J"
+    desc: "S"
     isStatic: true
     threshold: 0.40
     signals:
@@ -8537,8 +8512,1411 @@ fieldRules:
         min: 3
         weight: 0.5
       - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientMusicId
+    ownerTarget: Client
+    desc: "S"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # === FINAL LIMIT TEST ===
+  # Strategy 1: Client INSTANCE (non-static) int fields
+  - id: Client.clientInstanceCounter
+    ownerTarget: Client
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # Strategy 2: Char (C) descriptor
+  - id: Client.clientKeyChar
+    ownerTarget: Client
+    desc: "C"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # Strategy 3: 2D int array ([[I)
+  - id: Client.clientTileHeights
+    ownerTarget: Client
+    desc: "[[[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: writeMin
         min: 2
         weight: 0.5
+
+  # Strategy 4: Byte array ([B)
+  - id: Client.clientPacketData
+    ownerTarget: Client
+    desc: "[B"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # ============================================================
+  # FINAL LIMIT TEST - Successful strategies only
+  # ============================================================
+
+  # Strategy G: 2D int array (WORKS - +1 field from 476 → 477)
+  - id: Client.clientPathX
+    ownerTarget: Client
+    desc: "[[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # ============================================================
+  # UNDEREXPLORED CLASSES - Test 141
+  # ============================================================
+
+  # MouseHandler class fields (WORKS!)
+  - id: MouseHandler.mouseX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More MouseHandler fields
+  - id: MouseHandler.mouseY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: MouseHandler.mouseButton
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More MouseHandler fields
+  - id: MouseHandler.mouseClickX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  - id: MouseHandler.mouseClickY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 4
+        weight: 0.5
+
+  - id: MouseHandler.mouseLastX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 0.5
+      - kind: writeMin
+        min: 5
+        weight: 0.5
+
+  - id: MouseHandler.mouseLastY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: true
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: writeMin
+        min: 6
+        weight: 0.5
+
+  # ============================================================
+  # FINAL LIMIT TEST - Successful only
+  # ============================================================
+
+  # MouseHandler long (WORKS! +1 field)
+  - id: MouseHandler.mouseLastMoveTime
+    ownerTarget: MouseHandler
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More MouseHandler longs
+  - id: MouseHandler.mouseClickTime
+    ownerTarget: MouseHandler
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: MouseHandler.mouseIdleTime
+    ownerTarget: MouseHandler
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # Client long (WORKS)
+  - id: Client.clientLoginTime
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More Client longs
+  - id: Client.clientServerTime
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: Client.clientSessionTime
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # Client long - +1 field (WORKS)
+  - id: Client.clientLastActivity
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 4
+        weight: 0.5
+
+  # Client instance long (WORKS - +1)
+  - id: Client.clientInstanceTime
+    ownerTarget: Client
+    desc: "J"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ============================================================
+  # AGGRESSIVE PUSH - Safe rules only (no displacement)
+  # ============================================================
+
+  # Client long array (WORKS - +1)
+  - id: Client.clientLongArray
+    ownerTarget: Client
+    desc: "[J"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # Player instance ints (WORKS - +2)
+  - id: Player.playerCombatLevel
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Player.playerSkillLevel
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # IterableNodeDeque (WORKS - +1)
+  - id: IterableNodeDeque.dequeSize
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # More Player fields
+  - id: Player.playerWeight
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Player.playerRunEnergy
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More IterableNodeDeque
+  - id: IterableNodeDeque.dequeHead
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  # Projectile fields (WORKS - +1)
+  - id: Projectile.projectileEndCycle
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # CollisionMap fields (WORKS - +1)
+  - id: CollisionMap.collisionWidth
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # Static boolean (WORKS - +1)
+  - id: Client.clientIsMembers
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 1.0
+
+  # More booleans with different readMin
+  - id: Client.clientIsLoggedIn
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 1.0
+
+  - id: Client.clientHdEnabled
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 1.0
+
+  - id: Client.clientResizable
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 1.0
+
+  - id: Client.clientLoading
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 1.0
+
+  # Even more booleans
+  - id: Client.clientInCutscene
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: Client.clientCameraLocked
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: Client.clientDrawingArea
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: Client.clientMenuVisible
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 1.0
+
+  - id: Client.clientLowDetail
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 9
+        weight: 1.0
+
+  # More booleans - varying readMin
+  - id: Client.clientSpellSelected
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 11
+        weight: 1.0
+
+  - id: Client.clientItemSelected
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 13
+        weight: 1.0
+
+  - id: Client.clientDragging
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 14
+        weight: 1.0
+
+  - id: Client.clientFocused
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.25
+    signals:
+      - kind: readMin
+        min: 16
+        weight: 1.0
+
+  # ============================================================
+  # Final push - Working strategies
+  # ============================================================
+
+  # Actor instance boolean (WORKS - +1)
+  - id: Actor.actorMoving
+    ownerTarget: Actor
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  # ============================================================
+  # AGGRESSIVE PUSH - Test 177
+  # ============================================================
+
+  # More Actor instance booleans
+  - id: Actor.actorInCombat
+    ownerTarget: Actor
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: Actor.actorVisible
+    ownerTarget: Actor
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: Actor.actorAnimating
+    ownerTarget: Actor
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 1.0
+
+  # More Client booleans with different readMin
+  - id: Client.clientBool23
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 23
+        weight: 1.0
+
+  - id: Client.clientBool24
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 24
+        weight: 1.0
+
+  # NPC instance boolean
+  - id: NPC.npcVisible
+    ownerTarget: NPC
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # Player instance boolean
+  - id: Player.playerVisible
+    ownerTarget: Player
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ============================================================
+  # Test 179 - Safe rules only
+  # ============================================================
+
+  # Model instance boolean (WORKS - +1)
+  - id: Model.modelShadowed
+    ownerTarget: Model
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ============================================================
+  # Test 182 - Safe rules only
+  # ============================================================
+
+  # Model.modelSingleColor (WORKS - +1)
+  - id: Model.modelSingleColor
+    ownerTarget: Model
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  # SpotAnimation boolean (WORKS - +1)
+  - id: SpotAnimation.spotAnimFinished
+    ownerTarget: SpotAnimation
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ============================================================
+  # Test 187 - TileModel fields only (safe from Test 186)
+  # ============================================================
+
+  # TileModel.tileModelPlane (WORKS - +1)
+  - id: TileModel.tileModelPlane
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # TileModel.tileModelLayer (WORKS - +1)
+  - id: TileModel.tileModelLayer
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ============================================================
+  # Test 189 - Safe rules from Test 188
+  # ============================================================
+
+  # TileModel.tileModelFlat (WORKS - +1)
+  - id: TileModel.tileModelFlat
+    ownerTarget: TileModel
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # TextureProvider.textureHeight (WORKS - +1)
+  - id: TextureProvider.textureHeight
+    ownerTarget: TextureProvider
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ============================================================
+  # Test 191 - Safe rules from Test 190
+  # ============================================================
+
+  # OverlayDefinition.overlaySecondaryHue
+  - id: OverlayDefinition.overlaySecondaryHue
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # OverlayDefinition.overlaySecondarySaturation
+  - id: OverlayDefinition.overlaySecondarySaturation
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # OverlayDefinition.overlaySecondaryLightness
+  - id: OverlayDefinition.overlaySecondaryLightness
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # UnderlayDefinition.underlayId
+  - id: UnderlayDefinition.underlayId
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.2
+
+  # IterableNodeDeque boolean
+  - id: IterableNodeDeque.dequeEmpty
+    ownerTarget: IterableNodeDeque
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # CollisionMap boolean
+  - id: CollisionMap.collisionBlocked
+    ownerTarget: CollisionMap
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ============================================================
+  # Test 194 - Only Model.modelLit (safe)
+  # ============================================================
+
+  # Model.modelLit (WORKS - +1)
+  - id: Model.modelLit
+    ownerTarget: Model
+    desc: "Z"
+    isStatic: false
+    threshold: 0.20
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  # ============================================================
+  # Test 196 - Safe rules from Test 195
+  # ============================================================
+
+  # Client.clientGameSize (short) (WORKS - +1)
+  - id: Client.clientGameSize
+    ownerTarget: Client
+    desc: "S"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # Client.clientMenuHeight2 (short) (WORKS - +1)
+  - id: Client.clientMenuHeight2
+    ownerTarget: Client
+    desc: "S"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # Rasterizer2D.rasterizer2dClipY (WORKS - +1)
+  - id: Rasterizer2D.rasterizer2dClipY
+    ownerTarget: Rasterizer2D
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ============================================================
+  # Test 198 - Safe rules from Test 197
+  # ============================================================
+
+  # Rasterizer3D.rasterizer3dCenterY (WORKS - +1)
+  - id: Rasterizer3D.rasterizer3dCenterY
+    ownerTarget: Rasterizer3D
+    desc: "I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # GrandExchangeOffer.geOfferType (WORKS - +1)
+  - id: GrandExchangeOffer.geOfferType
+    ownerTarget: GrandExchangeOffer
+    desc: "B"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ============================================================
+  # Test 200 - Safe rules from Test 199
+  # ============================================================
+
+  # ObjectDefinition.objectDefinitionInteractType (WORKS - +1)
+  - id: ObjectDefinition.objectDefinitionInteractType
+    ownerTarget: ObjectDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ItemDefinition.itemDefinitionModelZoom (WORKS - +1)
+  - id: ItemDefinition.itemDefinitionModelZoom
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # ItemDefinition.itemDefinitionModelRotationX (WORKS - +1)
+  - id: ItemDefinition.itemDefinitionModelRotationX
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.8
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # ============================================================
+  # Test 207 - Safe rules from Test 206
+  # ============================================================
+
+  # Actor.actorHitsplatIds (int array) (WORKS - +1)
+  - id: Actor.actorHitsplatIds
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # Model.modelFaceColors (int array) (WORKS - +1)
+  - id: Model.modelFaceColors
+    ownerTarget: Model
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ============================================================
+  # Test 212 - Client static arrays only (safe)
+  # ============================================================
+
+  # Client.clientXModifiers (WORKS - +1)
+  - id: Client.clientXModifiers
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 1.0
+
+  # Client.clientSceneInstanceChunk (3D int array) (WORKS - +1)
+  - id: Client.clientSceneInstanceChunk
+    ownerTarget: Client
+    desc: "[[[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.7
+      - kind: writeMin
+        min: 3
+        weight: 0.3
+
+  # ============================================================
+  # Test 214 - Client.clientTimestamp only (safe)
+  # ============================================================
+
+  # Client.clientTimestamp (long) (WORKS - +1)
+  - id: Client.clientTimestamp
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # ============================================================
+  # Test 217 - Keep only safe rules (no SpotAnimation/Projectile)
+  # ============================================================
+
+  # Model static fields (agent recommended)
+  - id: Model.modelTriangleCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 50
+        weight: 1.0
+
+  - id: Model.modelVertexCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 1.0
+
+  # Client static boolean arrays
+  - id: Client.clientKeyPressed
+    ownerTarget: Client
+    desc: "[Z"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.8
+      - kind: writeMin
+        min: 3
+        weight: 0.2
+
+  # ============================================================
+  # Test 219 - More safe fields with high readMin
+  # ============================================================
+
+  # Tile static/scene fields
+  - id: Tile.tileFloorDecoration
+    ownerTarget: Tile
+    desc: "Ljava/lang/Object;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.7
+      - kind: writeMin
+        min: 3
+        weight: 0.3
+
+  # NPCDefinition model arrays
+  - id: NPCDefinition.npcDefinitionModels
+    ownerTarget: NPCDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # ObjectDefinition model arrays
+  - id: ObjectDefinition.objectDefinitionModels
+    ownerTarget: ObjectDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # AnimationSequence additional arrays
+  - id: AnimationSequence.animationSequenceFrameLengths
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 1.0
+
+  # ============================================================
+  # Test 221 - More high-confidence fields
+  # ============================================================
+
+  # ItemDefinition additional arrays
+  - id: ItemDefinition.itemDefinitionRecolorFrom
+    ownerTarget: ItemDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  - id: ItemDefinition.itemDefinitionRecolorTo
+    ownerTarget: ItemDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # NPCDefinition additional arrays
+  - id: NPCDefinition.npcDefinitionRecolorFrom
+    ownerTarget: NPCDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  - id: NPCDefinition.npcDefinitionRecolorTo
+    ownerTarget: NPCDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ObjectDefinition additional arrays
+  - id: ObjectDefinition.objectDefinitionRecolorFrom
+    ownerTarget: ObjectDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  - id: ObjectDefinition.objectDefinitionRecolorTo
+    ownerTarget: ObjectDefinition
+    desc: "[S"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # Scene static int arrays
+  - id: Scene.sceneHeightMap
+    ownerTarget: Scene
+    desc: "[[[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 1.0
+
+  # ============================================================
+  # Test 223 - Unique descriptor fields
+  # ============================================================
+
+  # Client static double fields
+  - id: Client.clientSinTable
+    ownerTarget: Client
+    desc: "[D"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: Client.clientCosTable
+    ownerTarget: Client
+    desc: "[D"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  # Model short arrays
+  - id: Model.modelVertexLabels
+    ownerTarget: Model
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 1.0
+
+  # Sprite instance fields
+  - id: Sprite.spritePixels
+    ownerTarget: Sprite
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 1.0
+
+  # Cache static fields
+  - id: Cache.cacheEmpty
+    ownerTarget: Cache
+    desc: "Z"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # CollisionMap int arrays
+  - id: CollisionMap.collisionMapFlags
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 1.0
+
+  # ============================================================
+  # Test 224 - High readMin unique fields
+  # ============================================================
+
+  # Player unique fields
+  - id: Player.playerAppearance
+    ownerTarget: Player
+    desc: "[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # World instance fields
+  - id: World.worldActivity
+    ownerTarget: World
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # TextureProvider fields
+  - id: TextureProvider.texturePixels
+    ownerTarget: TextureProvider
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  # Rasterizer3D static fields
+  - id: Rasterizer3D.rasterizer3dSineTable
+    ownerTarget: Rasterizer3D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 40
+        weight: 1.0
+
+  - id: Rasterizer3D.rasterizer3dCosineTable
+    ownerTarget: Rasterizer3D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.30
+    signals:
+      - kind: readMin
+        min: 40
+        weight: 1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
