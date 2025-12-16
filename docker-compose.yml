@@ -29,6 +29,9 @@ services:
     build: .
     container_name: osrs-hook-service
     restart: unless-stopped
+    # Run as root with full permissions
+    user: "0:0"
+    privileged: true
     # Route all traffic through VPN container
     network_mode: "service:gluetun"
     depends_on:
