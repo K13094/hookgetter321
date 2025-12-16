@@ -1,0 +1,8600 @@
+# ULTIMATE OSRS FIELD DETECTION RULES
+# Maximized for detecting ALL 54+ fields with aggressive thresholds
+# Aligned with hooks.json field names and obfuscated classes
+
+thresholdDefault: 0.60
+
+classRules:
+
+  # CLIENT CLASS - Massive static field container (MUST BE FIRST FOR PRIORITY)
+  - id: Client
+    type: class
+    threshold: 0.50
+    minFieldDescCounts:
+      "I": 120
+      "[I": 30
+    signals:
+      - kind: minLdcStrings
+        min: 600
+        weight: 1.0
+      - kind: minLdcNumbers
+        min: 15000
+        weight: 1.0
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 800
+        weight: 1.0
+
+  # ACTOR - Base class for Player and NPC (obf: "of")
+  - id: Actor
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 70
+      "[I": 10
+      "Ljava/lang/String;": 5
+    signals:
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 10
+        weight: 0.6
+      - kind: minLdcNumbers
+        min: 1500
+        weight: 0.4
+
+  # PLAYER - Extends Actor (obf: "cl")
+  - id: Player
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 4
+      "Ljava/lang/String;": 1
+    signals:
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 3
+        weight: 0.6
+      - kind: minLdcStrings
+        min: 1
+        weight: 0.4
+
+  # NPC - Extends Actor (obf: "bj")
+  - id: NPC
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 2
+    signals:
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD * * * *"
+        min: 2
+        weight: 0.6
+      - kind: minLdcNumbers
+        min: 3
+        weight: 0.4
+
+  # NPCDefinition (obf: "dz")
+  - id: NPCDefinition
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 7
+      "[Ljava/lang/String;": 1
+      "Ljava/lang/String;": 1
+    signals:
+      - kind: minLdcStrings
+        min: 15
+        weight: 0.5
+      - kind: minLdcNumbers
+        min: 800
+        weight: 0.5
+
+  # ItemDefinition (obf: "hi")
+  - id: ItemDefinition
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 8
+      "[Ljava/lang/String;": 1
+    signals:
+      - kind: minLdcStrings
+        min: 2
+        weight: 0.5
+      - kind: minLdcNumbers
+        min: 10
+        weight: 0.5
+
+  # ObjectDefinition (obf: "hu")
+  - id: ObjectDefinition
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 8
+      "[Ljava/lang/String;": 1
+    signals:
+      - kind: minLdcStrings
+        min: 1
+        weight: 0.5
+      - kind: minLdcNumbers
+        min: 8
+        weight: 0.5
+
+  # Tile (obf: "cq")
+  - id: Tile
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 3
+    signals:
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.6
+      - kind: minLdcNumbers
+        min: 3
+        weight: 0.4
+
+  # World (obf: "al")
+  - id: World
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 3
+      "Ljava/lang/String;": 2
+    signals:
+      - kind: minLdcStrings
+        min: 1
+        weight: 0.6
+      - kind: minLdcNumbers
+        min: 2
+        weight: 0.4
+
+  # GrandExchangeOffer (obf: "bh")
+  - id: GrandExchangeOffer
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 4
+    signals:
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 3
+        weight: 0.6
+      - kind: minLdcNumbers
+        min: 3
+        weight: 0.4
+
+  # Node (obf: "bm")
+  - id: Node
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "J": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 1
+        weight: 0.6
+
+  # Scene (obf: "dd")
+  - id: Scene
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "[[[I": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 5
+        weight: 0.6
+
+  # Cache (obf: "ab")
+  - id: Cache
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "I": 2
+    signals:
+      - kind: minLdcNumbers
+        min: 1
+        weight: 0.6
+
+  # MouseHandler (obf: "bp")
+  - id: MouseHandler
+    type: class
+    threshold: 0.60
+    interfaces:
+      - "java/awt/event/MouseListener"
+    minFieldDescCounts:
+      "I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 2
+        weight: 0.6
+
+  # Font (obf: "bg")
+  - id: Font
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "[I": 2
+      "I": 2
+    signals:
+      - kind: minLdcStrings
+        min: 1
+        weight: 0.5
+      - kind: minLdcNumbers
+        min: 5
+        weight: 0.5
+
+  # Sprite (obf: "am")
+  - id: Sprite
+    type: class
+    threshold: 0.60
+    minFieldDescCounts:
+      "[I": 1
+      "I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 3
+        weight: 0.6
+
+  # Widget - UI element with geometry fields (high geomUsageHits)
+  - id: Widget
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 40
+      "[Ljava/lang/String;": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 200
+        weight: 0.5
+      - kind: minLdcStrings
+        min: 30
+        weight: 0.5
+
+  # AnimationSequence - Animation sequence/frame data (high int field count)
+  - id: AnimationSequence
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 15
+      "[I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 100
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 5
+        weight: 0.4
+
+  # SpotAnimation - Graphics/spot animation effects
+  - id: SpotAnimation
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 8
+      "[I": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 50
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 3
+        weight: 0.4
+
+  # Rasterizer2D - 2D rasterization (very high geomUsageHits)
+  - id: Rasterizer2D
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "[I": 1
+      "I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 200
+        weight: 0.5
+      - kind: minLdcStrings
+        min: 30
+        weight: 0.5
+
+  # Rasterizer3D - 3D rasterization (high ldcNumbers, many int arrays)
+  - id: Rasterizer3D
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "[I": 3
+      "I": 5
+    signals:
+      - kind: minLdcNumbers
+        min: 500
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 20
+        weight: 0.4
+
+  # VarbitDefinition - Variable bit definitions
+  - id: VarbitDefinition
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 4
+    signals:
+      - kind: minLdcNumbers
+        min: 20
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.4
+
+  # OverlayDefinition - Map overlay definitions
+  - id: OverlayDefinition
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 5
+      "Z": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 10
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.4
+
+  # UnderlayDefinition - Map underlay definitions
+  - id: UnderlayDefinition
+    type: class
+    threshold: 0.65
+    minFieldDescCounts:
+      "I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 8
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.4
+
+  # TextureProvider - Texture/graphics system (very high geomUsageHits ~319)
+  - id: TextureProvider
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "I": 5
+    signals:
+      - kind: minLdcNumbers
+        min: 40
+        weight: 0.6
+      - kind: minLdcStrings
+        min: 40
+        weight: 0.4
+
+  # NOTE: Model rule removed - no matching class found with those criteria
+
+  # AbstractArchive - Archive/index class
+  - id: AbstractArchive
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "[[B": 1
+      "I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 30
+        weight: 0.6
+      - kind: minLdcStrings
+        min: 5
+        weight: 0.4
+
+  # Model - 3D model class (obf: iv - 74 fields, 41 int, many int arrays)
+  - id: Model
+    type: class
+    threshold: 0.75
+    minFieldDescCounts:
+      "I": 35
+      "[I": 4
+    signals:
+      - kind: minLdcNumbers
+        min: 400
+        weight: 0.5
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 5
+        weight: 0.5
+
+  # Projectile - Projectile/spell effects (obf: likely oo - 22 int fields, 191 geomHits)
+  - id: Projectile
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "I": 18
+    signals:
+      - kind: minLdcNumbers
+        min: 60
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 3
+        weight: 0.4
+
+  # NOTE: Buffer rule removed - too broad, was stealing Client class
+
+  # CollisionMap - Collision detection (obf: likely sf - 16 int fields)
+  - id: CollisionMap
+    type: class
+    threshold: 0.70
+    minFieldDescCounts:
+      "I": 12
+      "[[I": 1
+    signals:
+      - kind: minLdcNumbers
+        min: 30
+        weight: 0.6
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.4
+
+  # NOTE: Renderable rule removed - too broad, was conflicting with Tile
+
+  # NOTE: GraphicsObject, ScriptEvent, HealthBar, EnumDefinition, WallObject,
+  # FloorDecoration, BoundaryObject rules all REMOVED because they were
+  # too broad and causing massive conflicts.
+
+  # TileModel - Tile rendering model (obf: gs - 319 geomHits HIGHEST, 7 int, 3 int[])
+  # Using VERY SPECIFIC signals to avoid conflicts
+  - id: TileModel
+    type: class
+    threshold: 0.90
+    minFieldDescCounts:
+      "I": 5
+      "[I": 3
+    signals:
+      - kind: minLdcNumbers
+        min: 400
+        weight: 0.7
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 3
+        weight: 0.3
+
+  # IterableNodeDeque - Linked list structure (obf: lc - 7 int, 856 ldcNumbers)
+  # Very high LDC count relative to field count makes this unique
+  - id: IterableNodeDeque
+    type: class
+    threshold: 0.90
+    minFieldDescCounts:
+      "I": 5
+    signals:
+      - kind: minLdcNumbers
+        min: 800
+        weight: 0.8
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # NOTE: IterableHashTable rule removed - didn't match any class
+
+  # NOTE: PlayerDefinition rule removed - matched Actor (of) instead of hu
+  # hu (38 int, 5 [I) vs of (80 int, 14 [I) - Actor is larger and matches first
+
+
+# ============================================================
+# FIELD-LEVEL RULES - THE ULTIMATE 54 FIELD DETECTION
+# ============================================================
+
+fieldRules:
+
+  # ==================== CLIENT STATIC FIELDS ====================
+
+  # gameState (client.mw:I) - Game state indicator (0=login, 25=logged in, etc)
+  - id: Client.gameState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 5
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC * * * *"
+        min: 10
+        weight: 0.2
+
+  # loginState (client.ic:I) - Login screen state
+  - id: Client.loginState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.3
+      - kind: writeMin
+        min: 5
+        weight: 0.2
+
+  # baseX (client.fa:I) - World base X coordinate
+  - id: Client.baseX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # baseY (client.fi:I) - World base Y coordinate
+  - id: Client.baseY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # plane (client.mx:I) - Current floor level (0-3)
+  - id: Client.plane
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC * * * *"
+        min: 5
+        weight: 0.2
+
+  # energy (client.gm:I) - Run energy percentage
+  - id: Client.energy
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # weight (client.hv:I) - Player weight
+  - id: Client.weight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # currentWorld (client.gk:I) - Current world number
+  - id: Client.currentWorld
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # fps (client.fc:I) - Frames per second
+  - id: Client.fps
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # menuOptionCount (client.fi:I) - Number of right-click menu options
+  - id: Client.menuOptionCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: writeMin
+        min: 5
+        weight: 0.2
+
+  # cameraX (client.fl:I) - Camera X position
+  - id: Client.cameraX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # cameraY (client.ga:I) - Camera Y (height) position
+  - id: Client.cameraY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # cameraZ (client.gd:I) - Camera Z position
+  - id: Client.cameraZ
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 2
+        weight: 0.2
+
+  # cameraPitch (client.fb:I) - Camera pitch/tilt angle
+  - id: Client.cameraPitch
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # cameraYaw (client.gc:I) - Camera yaw/rotation angle
+  - id: Client.cameraYaw
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|* * GETSTATIC LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # viewportWidth (client.hm:I) - Game viewport width
+  - id: Client.viewportWidth
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # viewportHeight (client.hf:I) - Game viewport height
+  - id: Client.viewportHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # skillExperiences (client.gl:[I) - Array of skill XP values (23 skills)
+  - id: Client.skillExperiences
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # realSkillLevels (client.gh:[I) - Real skill levels
+  - id: Client.realSkillLevels
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # boostedSkillLevels (client.es:[I) - Boosted/current skill levels
+  - id: Client.boostedSkillLevels
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # varps (client.ov:[I) - Player settings/varbits container
+  - id: Client.varps
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: writeMin
+        min: 3
+        weight: 0.4
+
+  # groundItemIds - Ground item IDs array
+  - id: Client.groundItemIds
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: writeMin
+        min: 4
+        weight: 0.5
+
+  # playerIndices - Player indices array
+  - id: Client.playerIndices
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 0.5
+      - kind: writeMin
+        min: 5
+        weight: 0.5
+
+  # npcIndices - NPC indices array
+  - id: Client.npcIndices
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 14
+        weight: 0.5
+      - kind: writeMin
+        min: 6
+        weight: 0.5
+
+  # skillGoals - Skill goals array
+  - id: Client.skillGoals
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 16
+        weight: 0.5
+      - kind: writeMin
+        min: 7
+        weight: 0.5
+
+  # tempVarps - Temporary varps array
+  - id: Client.tempVarps
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 18
+        weight: 0.5
+      - kind: writeMin
+        min: 8
+        weight: 0.5
+
+  # widgetPositionsX - Widget X positions
+  - id: Client.widgetPositionsX
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.5
+      - kind: writeMin
+        min: 9
+        weight: 0.5
+
+  # widgetPositionsY - Widget Y positions
+  - id: Client.widgetPositionsY
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 22
+        weight: 0.5
+      - kind: writeMin
+        min: 10
+        weight: 0.5
+
+  # mapDotPlayers/mapDotNpcs - Removed, no matching candidates
+
+  # friendsListWorlds - Friends list worlds
+  - id: Client.friendsListWorlds
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 28
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== ACTOR INSTANCE FIELDS ====================
+
+  # actorAnimation (of.bd:I) - Current animation ID
+  - id: Actor.actorAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # actorHealthRatio (of.bi:I) - Health bar numerator
+  - id: Actor.actorHealthRatio
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # actorHealthScale (of.br:I) - Health bar denominator
+  - id: Actor.actorHealthScale
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # actorInteracting (of.bt:I) - Index of interacting entity
+  - id: Actor.actorInteracting
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # actorOrientation (of.bw:I) - Facing direction (0-2047)
+  - id: Actor.actorOrientation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # actorOverheadText (of.ba:Ljava/lang/String;) - Overhead chat text
+  - id: Actor.actorOverheadText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # actorCombatText - Combat action text
+  - id: Actor.actorCombatText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorExamineText - Examine text
+  - id: Actor.actorExamineText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorSpokenText - Spoken dialogue
+  - id: Actor.actorSpokenText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # actorActionText - Action text
+  - id: Actor.actorActionText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorHintText - Hint text
+  - id: Actor.actorHintText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorChatText - Chat text
+  - id: Actor.actorChatText
+    ownerTarget: Actor
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorPathLength (of.dv:I) - Path queue length
+  - id: Actor.actorPathLength
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # actorPoseAnimation (of.ca:I) - Idle/walk/run animation
+  - id: Actor.actorPoseAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # actorLocalX (of.ce:I) - Local X coordinate
+  - id: Actor.actorLocalX
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # actorLocalY (of.ch:I) - Local Y coordinate
+  - id: Actor.actorLocalY
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # actorSpotAnimation - Spot animation ID
+  - id: Actor.actorSpotAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorSpotAnimationFrame - Spot animation frame
+  - id: Actor.actorSpotAnimationFrame
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorCombatCycle - Combat cycle timer
+  - id: Actor.actorCombatCycle
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorMaxHealth - Maximum health
+  - id: Actor.actorMaxHealth
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorCurrentHealth - Current health
+  - id: Actor.actorCurrentHealth
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorMovementAnimation - Movement animation
+  - id: Actor.actorMovementAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== PLAYER INSTANCE FIELDS ====================
+
+  # playerName (cl.ac:Ljava/lang/String;) - Player name
+  - id: Player.playerName
+    ownerTarget: Player
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # playerCombatLevel (cl.ab:I) - Combat level
+  - id: Player.playerCombatLevel
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # playerTeam (cl.as:I) - Team number (for minigames)
+  - id: Player.playerTeam
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+
+  # playerSkullIcon (cl.ai:I) - Skull icon type
+  - id: Player.playerSkullIcon
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+
+  # playerPrayerIcon (cl.ad:I) - Prayer icon type
+  - id: Player.playerPrayerIcon
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+
+  # ==================== NPC DEFINITION FIELDS ====================
+
+  # npcDefinitionName (dz.name:Ljava/lang/String;) - NPC name
+  - id: NPCDefinition.npcDefinitionName
+    ownerTarget: NPCDefinition
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # npcDefinitionId (dz.ai:I) - NPC ID
+  - id: NPCDefinition.npcDefinitionId
+    ownerTarget: NPCDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # npcDefinitionCombatLevel (dz.ad:I) - NPC combat level
+  - id: NPCDefinition.npcDefinitionCombatLevel
+    ownerTarget: NPCDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+
+  # npcDefinitionActions (dz.aw:[Ljava/lang/String;) - Right-click actions
+  - id: NPCDefinition.npcDefinitionActions
+    ownerTarget: NPCDefinition
+    desc: "[Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== ITEM DEFINITION FIELDS ====================
+
+  # itemDefinitionId (hi.ab:I) - Item ID
+  - id: ItemDefinition.itemDefinitionId
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # itemDefinitionActions (hi.ai:[Ljava/lang/String;) - Item actions
+  - id: ItemDefinition.itemDefinitionActions
+    ownerTarget: ItemDefinition
+    desc: "[Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== OBJECT DEFINITION FIELDS ====================
+
+  # objectDefinitionId (hu.cm:I) - Object ID
+  - id: ObjectDefinition.objectDefinitionId
+    ownerTarget: ObjectDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # objectDefinitionActions (hu.dd:[Ljava/lang/String;) - Object actions
+  - id: ObjectDefinition.objectDefinitionActions
+    ownerTarget: ObjectDefinition
+    desc: "[Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== TILE FIELDS ====================
+
+  # tileX (cq.ae:I) - Tile X coordinate
+  - id: Tile.tileX
+    ownerTarget: Tile
+    desc: "I"
+    isStatic: false
+    threshold: 0.08
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # tileY - REMOVED: Gamepack only has 2 integer fields in Tile class (tileX and tilePlane)
+  # The Y coordinate is likely stored implicitly in the data structure array index
+
+  # tilePlane (cq.ac:I) - Tile plane/floor level
+  - id: Tile.tilePlane
+    ownerTarget: Tile
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: fieldPattern
+        value: "I|ALOAD * GETFIELD LDC IMUL * *"
+        min: 1
+        weight: 0.2
+
+  # ==================== GRAND EXCHANGE OFFER FIELDS ====================
+
+  # geOfferItemId (bh.at:I) - Item ID in offer
+  - id: GrandExchangeOffer.geOfferItemId
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # geOfferPrice (bh.au:I) - Price per item
+  - id: GrandExchangeOffer.geOfferPrice
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # geOfferQuantity (bh.aw:I) - Quantity of items
+  - id: GrandExchangeOffer.geOfferQuantity
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # geOfferState (bh.ay:I) - Offer state (pending, completed, etc)
+  - id: GrandExchangeOffer.geOfferState
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # ==================== WORLD FIELDS ====================
+
+  # worldId (al.av:I) - World number
+  - id: World.worldId
+    ownerTarget: World
+    desc: "I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # worldActivity (al.an:Ljava/lang/String;) - World activity string
+  - id: World.worldActivity
+    ownerTarget: World
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # NOTE: World.worldLocation, worldPlayerCount, worldTypes, and GE.geOfferSpent/Transferred
+  # rules removed - fields don't exist with matching criteria in this gamepack version
+
+  # worldAddress (al.at:Ljava/lang/String;) - World IP/address
+  - id: World.worldAddress
+    ownerTarget: World
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== ADDITIONAL CLIENT FIELDS ====================
+
+  # localPlayer - The local player Actor reference
+  - id: Client.localPlayer
+    ownerTarget: Client
+    desc: "Lof;"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # players - Array of all players in scene
+  - id: Client.players
+    ownerTarget: Client
+    desc: "[Lcl;"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.6
+      - kind: writeMin
+        min: 3
+        weight: 0.4
+
+  # npcs - Array of all NPCs in scene
+  - id: Client.npcs
+    ownerTarget: Client
+    desc: "[Laq;"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.6
+      - kind: writeMin
+        min: 3
+        weight: 0.4
+
+  # widgets - 2D array of all UI widgets
+  - id: Client.widgets
+    ownerTarget: Client
+    desc: "[[Ljava/lang/Object;"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 50
+        weight: 0.7
+      - kind: writeMin
+        min: 5
+        weight: 0.3
+
+  # scene - The scene object containing tiles
+  - id: Client.scene
+    ownerTarget: Client
+    desc: "Ldd;"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # tiles - 3D array of scene tiles [plane][x][y]
+  - id: Scene.tiles
+    ownerTarget: Scene
+    desc: "[[[Lbj;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # ==================== MENU FIELDS ====================
+
+  # menuOpen - Whether the right-click menu is open
+  - id: Client.menuOpen
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # clientLoggedIn - Whether client is logged in
+  - id: Client.clientLoggedIn
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.5
+      - kind: writeMin
+        min: 5
+        weight: 0.5
+
+  # clientFocused - Whether client window is focused
+  - id: Client.clientFocused
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # menuX - X position of the menu
+  - id: Client.menuX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 2
+        weight: 0.2
+
+  # menuY - Y position of the menu
+  - id: Client.menuY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 2
+        weight: 0.2
+
+  # menuWidth - Width of the menu
+  - id: Client.menuWidth
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # menuHeight - Height of the menu
+  - id: Client.menuHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 1
+        weight: 0.2
+
+  # menuOpcodes - Menu action opcodes array
+  - id: Client.menuOpcodes
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.6
+      - kind: writeMin
+        min: 5
+        weight: 0.4
+
+  # menuParam0 - Menu action first parameter array
+  - id: Client.menuParam0
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: writeMin
+        min: 4
+        weight: 0.4
+
+  # menuParam1 - Menu action second parameter array
+  - id: Client.menuParam1
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: writeMin
+        min: 4
+        weight: 0.4
+
+  # menuIdentifiers - Menu action identifiers (entity IDs) array
+  - id: Client.menuIdentifiers
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: writeMin
+        min: 4
+        weight: 0.4
+
+  # menuOptions - Menu option text array
+  - id: Client.menuOptions
+    ownerTarget: Client
+    desc: "[Ljava/lang/String;"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # menuTargets - Menu target text array
+  - id: Client.menuTargets
+    ownerTarget: Client
+    desc: "[Ljava/lang/String;"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.6
+      - kind: writeMin
+        min: 4
+        weight: 0.4
+
+  # ==================== INPUT FIELDS ====================
+
+  # mouseX - Current mouse X coordinate
+  - id: Client.mouseX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 2
+        weight: 0.2
+
+  # mouseY - Current mouse Y coordinate
+  - id: Client.mouseY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.3
+      - kind: writeMin
+        min: 2
+        weight: 0.2
+
+  # gameCycle - Game tick counter
+  - id: Client.gameCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 3
+        weight: 0.3
+      - kind: writeMin
+        min: 2
+        weight: 0.2
+
+  # clickedX - Mouse click X coordinate
+  - id: Client.clickedX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clickedY - Mouse click Y coordinate
+  - id: Client.clickedY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # selectedItemId - Selected item ID
+  - id: Client.selectedItemId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # selectedSpellId - Selected spell ID
+  - id: Client.selectedSpellId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # mapAngle - Compass/map rotation angle
+  - id: Client.mapAngle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # mapScale - Map zoom/scale level
+  - id: Client.mapScale
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== ADDITIONAL INSTANCE FIELDS ====================
+
+  # npcDefinition - NPC's definition reference
+  - id: NPC.npcDefinition
+    ownerTarget: NPC
+    desc: "Ldz;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # itemDefinitionName - Item name
+  - id: ItemDefinition.itemDefinitionName
+    ownerTarget: ItemDefinition
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # itemDefinitionId - Item ID
+  - id: ItemDefinition.itemDefinitionId
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # itemDefinitionStackable - Stackable flag
+  - id: ItemDefinition.itemDefinitionStackable
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # itemDefinitionPrice - Store price
+  - id: ItemDefinition.itemDefinitionPrice
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # itemDefinitionMembersOnly - Members-only flag
+  - id: ItemDefinition.itemDefinitionMembersOnly
+    ownerTarget: ItemDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # itemDefinitionActions - Item actions/options
+  - id: ItemDefinition.itemDefinitionActions
+    ownerTarget: ItemDefinition
+    desc: "[Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # objectDefinitionName - Object name
+  - id: ObjectDefinition.objectDefinitionName
+    ownerTarget: ObjectDefinition
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # npcDefinitionName - Removed duplicate, see earlier rule
+
+  # ==================== WIDGET FIELDS ====================
+
+  # widgetX - Widget X position
+  - id: Widget.widgetX
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetY - Widget Y position
+  - id: Widget.widgetY
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetWidth - Widget width
+  - id: Widget.widgetWidth
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetHeight - Widget height
+  - id: Widget.widgetHeight
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetId - Widget ID
+  - id: Widget.widgetId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # widgetParentId - Widget parent ID
+  - id: Widget.widgetParentId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetText - Widget text content
+  - id: Widget.widgetText
+    ownerTarget: Widget
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # widgetName - Widget name/identifier
+  - id: Widget.widgetName
+    ownerTarget: Widget
+    desc: "Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # widgetActions - Widget action options
+  - id: Widget.widgetActions
+    ownerTarget: Widget
+    desc: "[Ljava/lang/String;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # widgetScrollX - Widget scroll X position
+  - id: Widget.widgetScrollX
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetScrollY - Widget scroll Y position
+  - id: Widget.widgetScrollY
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetItemId - Widget item ID (for inventory slots)
+  - id: Widget.widgetItemId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetItemQuantity - Widget item quantity
+  - id: Widget.widgetItemQuantity
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetHidden - Widget hidden flag
+  - id: Widget.widgetHidden
+    ownerTarget: Widget
+    desc: "Z"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # widgetType - Widget type ID
+  - id: Widget.widgetType
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetContentType - Widget content type
+  - id: Widget.widgetContentType
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetModelId - Widget 3D model ID
+  - id: Widget.widgetModelId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetSpriteId - Widget sprite/image ID
+  - id: Widget.widgetSpriteId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetFontId - Widget font ID
+  - id: Widget.widgetFontId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetTextColor - Widget text color
+  - id: Widget.widgetTextColor
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetBorderThickness - Widget border size
+  - id: Widget.widgetBorderThickness
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetOpacity - Widget opacity/alpha
+  - id: Widget.widgetOpacity
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== NODE FIELDS ====================
+
+  # nodeUid - Node unique ID (hash)
+  - id: Node.nodeUid
+    ownerTarget: Node
+    desc: "J"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # Node long field expansion removed - caused conflicts with nodeUid
+
+  # nodePrevious - Previous node in linked list
+  - id: Node.nodePrevious
+    ownerTarget: Node
+    desc: "Lbm;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # nodeNext - Next node in linked list
+  - id: Node.nodeNext
+    ownerTarget: Node
+    desc: "Lbm;"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # ==================== SPRITE FIELDS ====================
+
+  # spritePixels - Sprite pixel data
+  - id: Sprite.spritePixels
+    ownerTarget: Sprite
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # spriteWidth - Sprite width
+  - id: Sprite.spriteWidth
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spriteHeight - Sprite height
+  - id: Sprite.spriteHeight
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spriteOffsetX - Sprite X offset
+  - id: Sprite.spriteOffsetX
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spriteOffsetY - Sprite Y offset
+  - id: Sprite.spriteOffsetY
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== SCENE FIELDS ====================
+
+  # sceneTiles - 3D array of tiles
+  - id: Scene.sceneTiles
+    ownerTarget: Scene
+    desc: "[[[Lbj;"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # sceneMinPlane - Minimum visible plane
+  - id: Scene.sceneMinPlane
+    ownerTarget: Scene
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== FONT FIELDS ====================
+
+  # fontCharacterWidths - Character width array
+  - id: Font.fontCharacterWidths
+    ownerTarget: Font
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # fontCharacterHeights - Character height array
+  - id: Font.fontCharacterHeights
+    ownerTarget: Font
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== ANIMATION SEQUENCE FIELDS ====================
+
+  # animationId - Animation ID
+  - id: AnimationSequence.animationId
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationFrameCount - Number of frames
+  - id: AnimationSequence.animationFrameCount
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationFrameIds - Frame IDs array
+  - id: AnimationSequence.animationFrameIds
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # animationFrameDurations - Frame durations
+  - id: AnimationSequence.animationFrameDurations
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # animationInterleaveIds - Interleave frame IDs
+  - id: AnimationSequence.animationInterleaveIds
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # animationSecondaryIds - Secondary frame IDs
+  - id: AnimationSequence.animationSecondaryIds
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # animationSoundEffects - Sound effect IDs
+  - id: AnimationSequence.animationSoundEffects
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # animationTransformations - Transformation IDs
+  - id: AnimationSequence.animationTransformations
+    ownerTarget: AnimationSequence
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== SPOT ANIMATION FIELDS ====================
+
+  # spotAnimationId - Spot animation ID
+  - id: SpotAnimation.spotAnimationId
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spotAnimationModelId - Model ID
+  - id: SpotAnimation.spotAnimationModelId
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spotAnimationSequence - Animation sequence reference
+  - id: SpotAnimation.spotAnimationSequence
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== RASTERIZER2D FIELDS ====================
+
+  # pixels - Pixel buffer array
+  - id: Rasterizer2D.pixels
+    ownerTarget: Rasterizer2D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # width - Rasterizer width
+  - id: Rasterizer2D.width
+    ownerTarget: Rasterizer2D
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # height - Rasterizer height
+  - id: Rasterizer2D.height
+    ownerTarget: Rasterizer2D
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # ==================== VARBIT DEFINITION FIELDS ====================
+
+  # varbitBaseVar - Base varp ID
+  - id: VarbitDefinition.varbitBaseVar
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # varbitStartBit - Start bit position
+  - id: VarbitDefinition.varbitStartBit
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # varbitEndBit - End bit position
+  - id: VarbitDefinition.varbitEndBit
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== OVERLAY DEFINITION FIELDS ====================
+
+  # overlayRgbColor - RGB color value
+  - id: OverlayDefinition.overlayRgbColor
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # overlayTextureId - Texture ID
+  - id: OverlayDefinition.overlayTextureId
+    ownerTarget: OverlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # overlayHideUnderlay - Hide underlay flag
+  - id: OverlayDefinition.overlayHideUnderlay
+    ownerTarget: OverlayDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # overlayBlendTexture - Blend texture flag
+  - id: OverlayDefinition.overlayBlendTexture
+    ownerTarget: OverlayDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # overlayIsTransparent - Transparency flag
+  - id: OverlayDefinition.overlayIsTransparent
+    ownerTarget: OverlayDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # overlayClampMode - Clamp mode flag
+  - id: OverlayDefinition.overlayClampMode
+    ownerTarget: OverlayDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # overlayHasSecondaryColor - Secondary color flag
+  - id: OverlayDefinition.overlayHasSecondaryColor
+    ownerTarget: OverlayDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 1.0
+
+  # ==================== UNDERLAY DEFINITION FIELDS ====================
+
+  # underlayRgbColor - RGB color value
+  - id: UnderlayDefinition.underlayRgbColor
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== RASTERIZER3D FIELDS ====================
+
+  # rasterizer3dClipX - Clip X value
+  - id: Rasterizer3D.rasterizer3dClipX
+    ownerTarget: Rasterizer3D
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # rasterizer3dClipY - Clip Y value
+  - id: Rasterizer3D.rasterizer3dClipY
+    ownerTarget: Rasterizer3D
+    desc: "I"
+    isStatic: true
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.5
+
+  # rasterizer3dSineTable - Sine lookup table
+  - id: Rasterizer3D.rasterizer3dSineTable
+    ownerTarget: Rasterizer3D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # rasterizer3dCosineTable - Cosine lookup table
+  - id: Rasterizer3D.rasterizer3dCosineTable
+    ownerTarget: Rasterizer3D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # rasterizer3dColorPalette/DepthBuffer - Removed, no matching candidates
+
+  # rasterizer3dTexturePalette - Texture palette array
+  - id: Rasterizer3D.rasterizer3dTexturePalette
+    ownerTarget: Rasterizer3D
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 11
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== TEXTURE PROVIDER FIELDS ====================
+
+  # textureIds - Texture ID array
+  - id: TextureProvider.textureIds
+    ownerTarget: TextureProvider
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # textureBrightness - Brightness value
+  - id: TextureProvider.textureBrightness
+    ownerTarget: TextureProvider
+    desc: "D"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # ==================== ABSTRACT ARCHIVE FIELDS ====================
+
+  # archiveData - Cached archive data
+  - id: AbstractArchive.archiveData
+    ownerTarget: AbstractArchive
+    desc: "[[B"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # archiveFileCount - Number of files
+  - id: AbstractArchive.archiveFileCount
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== MODEL FIELDS ====================
+  # NOTE: Model vertex array rules (X/Y/Z) removed - they all have identical signals
+  # and compete for the same fields, causing unresolved conflicts.
+  # Model int count fields kept for differentiation.
+
+  # modelVertexCount - Number of vertices
+  - id: Model.modelVertexCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelTriangleCount - Number of triangles
+  - id: Model.modelTriangleCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== PROJECTILE FIELDS ====================
+
+  # projectileId - Projectile ID
+  - id: Projectile.projectileId
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # projectileX - Projectile X position
+  - id: Projectile.projectileX
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # projectileY - Projectile Y position
+  - id: Projectile.projectileY
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # projectileZ - Projectile Z/height
+  - id: Projectile.projectileZ
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # projectileTargetIndex - Target entity index
+  - id: Projectile.projectileTargetIndex
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== COLLISION MAP FIELDS ====================
+
+  # collisionFlags - 2D collision flags array
+  - id: CollisionMap.collisionFlags
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.50
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # collisionX - Map X coordinate
+  - id: CollisionMap.collisionX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionY - Map Y coordinate
+  - id: CollisionMap.collisionY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: Buffer fields removed since Buffer class rule was removed
+
+  # ==================== CACHE FIELDS ====================
+
+  # cacheSize - Current number of cached items
+  - id: Cache.cacheSize
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # cacheCapacity - Maximum cache capacity
+  - id: Cache.cacheCapacity
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== MOUSE HANDLER FIELDS ====================
+
+  # mouseLastX - Last mouse X position
+  - id: MouseHandler.mouseLastX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # mouseLastY - Last mouse Y position
+  - id: MouseHandler.mouseLastY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # mouseButton - Current mouse button state
+  - id: MouseHandler.mouseButton
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # mouseIdleTicks - Mouse idle tick counter
+  - id: MouseHandler.mouseIdleTicks
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== ABSTRACT ARCHIVE FIELDS (EXPANDED) ====================
+
+  # archiveGroupCount - Number of groups in archive
+  - id: AbstractArchive.archiveGroupCount
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # archiveHash - Archive hash/checksum
+  - id: AbstractArchive.archiveHash
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # archiveCrc - Archive CRC value
+  - id: AbstractArchive.archiveCrc
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== TEXTURE PROVIDER FIELDS (EXPANDED) ====================
+
+  # textureCount - Number of textures
+  - id: TextureProvider.textureCount
+    ownerTarget: TextureProvider
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # textureSize - Texture dimension size
+  - id: TextureProvider.textureSize
+    ownerTarget: TextureProvider
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== TILE MODEL FIELDS ====================
+
+  # tileModelVertexX - Tile vertex X coordinates
+  - id: TileModel.tileModelVertexX
+    ownerTarget: TileModel
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # tileModelVertexY - Tile vertex Y coordinates
+  - id: TileModel.tileModelVertexY
+    ownerTarget: TileModel
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # tileModelVertexZ - Tile vertex Z coordinates
+  - id: TileModel.tileModelVertexZ
+    ownerTarget: TileModel
+    desc: "[I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # tileModelColor - Tile colors
+  - id: TileModel.tileModelColor
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # tileModelSize - Number of tile vertices
+  - id: TileModel.tileModelSize
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== ITERABLE NODE DEQUE FIELDS ====================
+
+  # dequeHead - Head of deque
+  - id: IterableNodeDeque.dequeHead
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # dequeTail - Tail of deque
+  - id: IterableNodeDeque.dequeTail
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # dequeSize - Size of deque
+  - id: IterableNodeDeque.dequeSize
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # NOTE: PlayerDefinition fields removed since class rule was removed
+
+  # ==================== ADDITIONAL NPC FIELDS ====================
+
+  # npcIndex - NPC index in scene
+  - id: NPC.npcIndex
+    ownerTarget: NPC
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: NPC.npcModelHeight removed - caused conflict
+
+  # ==================== ADDITIONAL SCENE FIELDS ====================
+
+  # sceneMaxPlane - Maximum scene plane
+  - id: Scene.sceneMaxPlane
+    ownerTarget: Scene
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # sceneSizeX - Scene width
+  - id: Scene.sceneSizeX
+    ownerTarget: Scene
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: Scene.sceneSizeY removed - caused conflict
+
+  # ==================== ADDITIONAL COLLISIONMAP FIELDS ====================
+
+  # collisionWidth - Map width
+  - id: CollisionMap.collisionWidth
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionHeight - Map height
+  - id: CollisionMap.collisionHeight
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.45
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== MODEL VERTEX ARRAYS ====================
+  # Note: Only adding arrays with distinct read patterns
+
+  # modelVertexX - Vertex X coordinates
+  - id: Model.modelVertexX
+    ownerTarget: Model
+    desc: "[I"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.7
+      - kind: writeMin
+        min: 2
+        weight: 0.3
+
+  # modelVertexY - Vertex Y coordinates
+  - id: Model.modelVertexY
+    ownerTarget: Model
+    desc: "[I"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # modelVertexZ - Vertex Z coordinates
+  - id: Model.modelVertexZ
+    ownerTarget: Model
+    desc: "[I"
+    isStatic: false
+    threshold: 0.35
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.7
+      - kind: writeMin
+        min: 1
+        weight: 0.3
+
+  # ==================== MOUSEHANDLER FIELDS ====================
+
+  # mouseHandlerX - Current mouse X
+  - id: MouseHandler.mouseHandlerX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # mouseHandlerY - Current mouse Y
+  - id: MouseHandler.mouseHandlerY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # mouseHandlerClickX - Click X coordinate
+  - id: MouseHandler.mouseHandlerClickX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # mouseHandlerClickY - Click Y coordinate
+  - id: MouseHandler.mouseHandlerClickY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== OBJECTDEFINITION EXPANSION ====================
+
+  # objectDefinitionName - Removed duplicate, see earlier rule
+
+  # NOTE: objectDefinitionWidth and objectDefinitionHeight removed - conflicted with objectDefinitionId
+
+  # ==================== UNDERLAYDEFINITION EXPANSION ====================
+
+  # underlayHue - HSL hue value
+  - id: UnderlayDefinition.underlayHue
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # underlaySaturation - HSL saturation value
+  - id: UnderlayDefinition.underlaySaturation
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # underlayLightness - HSL lightness value
+  - id: UnderlayDefinition.underlayLightness
+    ownerTarget: UnderlayDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== NPCDEFINITION EXPANSION ====================
+
+  # npcDefinitionName - Removed duplicate, see earlier rule
+
+  # npcDefinitionSize - NPC tile size
+  - id: NPCDefinition.npcDefinitionSize
+    ownerTarget: NPCDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # npcDefinitionStandAnimation - Standing animation
+  - id: NPCDefinition.npcDefinitionStandAnimation
+    ownerTarget: NPCDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: npcDefinitionWalkAnimation removed - all candidates already used by other NPC fields
+  # NOTE: Tile.tileY removed - conflicts with tileX and tilePlane
+
+  # ==================== ITEMDEFINITION EXPANSION ====================
+
+  # itemDefinitionNoteId - Note item ID reference
+  - id: ItemDefinition.itemDefinitionNoteId
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # itemDefinitionNoteTemplateId - Note template ID
+  - id: ItemDefinition.itemDefinitionNoteTemplateId
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # itemDefinitionModelId - 3D model ID
+  - id: ItemDefinition.itemDefinitionModelId
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== PLAYER EXPANSION ====================
+
+  # playerName - Removed duplicate, see earlier rule
+
+  # playerTotalLevel - Total skill level
+  - id: Player.playerTotalLevel
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # playerHeadIcon - Overhead icon index
+  - id: Player.playerHeadIcon
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # ==================== GRANDEXCHANGEOFFER EXPANSION ====================
+
+  # NOTE: geOfferTotalQuantity removed - conflicted with existing GE fields
+
+  # geOfferSpent - Gold spent on offer
+  - id: GrandExchangeOffer.geOfferSpent
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== ANIMATIONSEQUENCE EXPANSION ====================
+
+  # animationLoopOffset - Loop restart point
+  - id: AnimationSequence.animationLoopOffset
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationPriority - Animation priority level
+  - id: AnimationSequence.animationPriority
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # animationReplyMode - Reply/reset mode
+  - id: AnimationSequence.animationReplyMode
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # animationWalkingPrecedence - Walking precedence level
+  - id: AnimationSequence.animationWalkingPrecedence
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== SPOTANIMATION EXPANSION ====================
+
+  # spotAnimationResizeX - X scale factor
+  - id: SpotAnimation.spotAnimationResizeX
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # spotAnimationResizeY - Y scale factor
+  - id: SpotAnimation.spotAnimationResizeY
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # spotAnimationRotation - Rotation angle
+  - id: SpotAnimation.spotAnimationRotation
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== CACHE/ARCHIVE EXPANSION ====================
+
+  # cacheCapacity - Cache capacity
+  - id: Cache.cacheCapacity
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # cacheRemaining - Remaining cache slots
+  - id: Cache.cacheRemaining
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== ACTOR EXPANSION ====================
+  # Actor has 80+ int fields - currently only 16 mapped
+
+  # actorQueueSize - Movement queue size
+  - id: Actor.actorQueueSize
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorTargetIndex - Target actor index
+  - id: Actor.actorTargetIndex
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 2
+        weight: 0.6
+
+  # actorIdleAnimation - Idle pose animation
+  - id: Actor.actorIdleAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorTurnAnimation - Turn animation
+  - id: Actor.actorTurnAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorWalkBackAnimation - Walk backwards animation
+  - id: Actor.actorWalkBackAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # actorWalkLeftAnimation - Walk left animation
+  - id: Actor.actorWalkLeftAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorWalkRightAnimation - Walk right animation
+  - id: Actor.actorWalkRightAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorRunAnimation - Run animation
+  - id: Actor.actorRunAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+        min: 1
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== COLLISIONMAP EXPANSION ====================
+  # CollisionMap has 69 int fields - currently only 4 mapped
+
+  # collisionFlags - 2D collision flags array
+  - id: CollisionMap.collisionFlags
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.6
+      - kind: writeMin
+        min: 2
+        weight: 0.4
+
+  # collisionBaseX - Base X coordinate
+  - id: CollisionMap.collisionBaseX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionBaseY - Base Y coordinate
+  - id: CollisionMap.collisionBaseY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # ==================== WIDGET EXPANSION ====================
+
+  # widgetIndex - Widget child index
+  - id: Widget.widgetIndex
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetOriginalX - Original X position
+  - id: Widget.widgetOriginalX
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # widgetOriginalY - Original Y position
+  - id: Widget.widgetOriginalY
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetOriginalWidth - Original width
+  - id: Widget.widgetOriginalWidth
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetOriginalHeight - Original height
+  - id: Widget.widgetOriginalHeight
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== MORE ACTOR FIELDS ====================
+
+  # actorPathX - Path X coordinates array
+  - id: Actor.actorPathX
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.6
+      - kind: writeMin
+        min: 1
+        weight: 0.4
+
+  # actorPathY - Path Y coordinates array
+  - id: Actor.actorPathY
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorSize - Actor tile size
+  - id: Actor.actorSize
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorHeight - Actor height
+  - id: Actor.actorHeight
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # actorModelHeight - Model height offset
+  - id: Actor.actorModelHeight
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== MORE CLIENT FIELDS ====================
+
+  # clientFps - Current FPS value
+  - id: Client.clientFps
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientMemory - Memory usage
+  - id: Client.clientMemory
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== MORE PROJECTILE FIELDS ====================
+
+  # projectileStartX - Starting X coordinate
+  - id: Projectile.projectileStartX
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # projectileStartY - Starting Y coordinate
+  - id: Projectile.projectileStartY
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # projectileEndHeight - End height
+  - id: Projectile.projectileEndHeight
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: Rasterizer2D clip fields removed - conflicted with existing width/height/pixels
+
+  # ==================== PUSH TO 200 ====================
+
+  # actorGraphicFrame - Spot animation current frame
+  - id: Actor.actorGraphicFrame
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorGraphicDelay - Spot animation delay
+  - id: Actor.actorGraphicDelay
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetTextShadowed - Text shadow enabled
+  - id: Widget.widgetTextShadowed
+    ownerTarget: Widget
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # spotAnimationAmbient - Ambient light value
+  - id: SpotAnimation.spotAnimationAmbient
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== ANIMATIONSEQUENCE MEGA EXPANSION ====================
+  # AnimationSequence has 46 int fields, only 8 mapped - huge potential!
+
+  # animationLeftHandItem - Left hand item ID
+  - id: AnimationSequence.animationLeftHandItem
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationRightHandItem - Right hand item ID
+  - id: AnimationSequence.animationRightHandItem
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # animationMaxLoops - Maximum loop count
+  - id: AnimationSequence.animationMaxLoops
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationShieldId - Shield display ID
+  - id: AnimationSequence.animationShieldId
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # animationWeaponId - Weapon display ID
+  - id: AnimationSequence.animationWeaponId
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationForcedPriority - Forced priority value
+  - id: AnimationSequence.animationForcedPriority
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # ==================== MODEL MEGA EXPANSION ====================
+  # Model has 41 int fields + 4 [I] arrays, only 5 mapped
+
+  # modelBoundsType - Bounds calculation type
+  - id: Model.modelBoundsType
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelBottomY - Bottom Y bound
+  - id: Model.modelBottomY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # modelRadius - Bounding radius
+  - id: Model.modelRadius
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelDiameter - Bounding diameter
+  - id: Model.modelDiameter
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # modelTextureCount - Number of textures
+  - id: Model.modelTextureCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # ==================== VARBITDEFINITION EXPANSION ====================
+  # VarbitDefinition has 9 int fields, only 3 mapped
+
+  # varbitId - Varbit definition ID
+  - id: VarbitDefinition.varbitId
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # varbitLsb - Least significant bit
+  - id: VarbitDefinition.varbitLsb
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # varbitMsb - Most significant bit
+  - id: VarbitDefinition.varbitMsb
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== MORE COLLISIONMAP EXPANSION ====================
+
+  # collisionSizeX - Collision map X size
+  - id: CollisionMap.collisionSizeX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionSizeY - Collision map Y size
+  - id: CollisionMap.collisionSizeY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # NOTE: NPC.npcDefinitionRef removed - conflicted with npcIndex
+  # NOTE: Scene.scenePlane and sceneSizeYNew removed - conflicted with existing scene fields
+
+  # ==================== PUSH TO 225+ ====================
+
+  # itemDefinitionShiftClickAction - Shift click action
+  - id: ItemDefinition.itemDefinitionShiftClickAction
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # itemDefinitionTeam - Item team ID
+  - id: ItemDefinition.itemDefinitionTeam
+    ownerTarget: ItemDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # spotAnimationContrast - Contrast value
+  - id: SpotAnimation.spotAnimationContrast
+    ownerTarget: SpotAnimation
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # playerAppearance - Appearance array
+  - id: Player.playerAppearance
+    ownerTarget: Player
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorHitsplatCount - Number of hitsplats
+  - id: Actor.actorHitsplatCount
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorHitsplatTypes - Hitsplat type array
+  - id: Actor.actorHitsplatTypes
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorHitsplatValues - Hitsplat damage values
+  - id: Actor.actorHitsplatValues
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorHitsplatCycles - Hitsplat cycle times
+  - id: Actor.actorHitsplatCycles
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorHitsplatDurations - Hitsplat durations
+  - id: Actor.actorHitsplatDurations
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # actorQueueX - Queued X positions
+  - id: Actor.actorQueueX
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # actorQueueY - Queued Y positions
+  - id: Actor.actorQueueY
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # actorMovementSpeeds - Movement speeds array
+  - id: Actor.actorMovementSpeeds
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # NOTE: World expansion fields removed - conflicted with existing world fields
+
+  # ==================== PUSH TO 240+ ====================
+
+  # widgetScrollHeight - Scroll area height
+  - id: Widget.widgetScrollHeight
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetScrollWidth - Scroll area width
+  - id: Widget.widgetScrollWidth
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetRotationX - X rotation angle
+  - id: Widget.widgetRotationX
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetRotationY - Y rotation angle
+  - id: Widget.widgetRotationY
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetRotationZ - Z rotation angle
+  - id: Widget.widgetRotationZ
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetModelZoom - Model zoom level
+  - id: Widget.widgetModelZoom
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # animationSequenceCount - Total animations
+  - id: AnimationSequence.animationSequenceCount
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationMergesWalking - Merge with walking flag
+  - id: AnimationSequence.animationMergesWalking
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # projectileSlope - Trajectory slope
+  - id: Projectile.projectileSlope
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # NOTE: projectileStartHeight, projectileDelay, projectileCycleEnd removed - conflicted with projectileZ
+
+  # modelCenterX - Center X coordinate
+  - id: Model.modelCenterX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelCenterY - Center Y coordinate
+  - id: Model.modelCenterY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # modelCenterZ - Center Z coordinate
+  - id: Model.modelCenterZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==================== CLIENT MEGA EXPANSION ====================
+
+  # clientDestinationX - Destination X coordinate
+  - id: Client.clientDestinationX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientDestinationY - Destination Y coordinate
+  - id: Client.clientDestinationY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # clientNpcCount - Number of NPCs
+  - id: Client.clientNpcCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientPlayerCount - Number of players
+  - id: Client.clientPlayerCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # clientHintArrowType - Hint arrow type
+  - id: Client.clientHintArrowType
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientHintArrowX - Hint arrow X
+  - id: Client.clientHintArrowX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # clientHintArrowY - Hint arrow Y
+  - id: Client.clientHintArrowY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientHintArrowNpcIndex - Hint arrow NPC
+  - id: Client.clientHintArrowNpcIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # clientCrosshairState - Crosshair state
+  - id: Client.clientCrosshairState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # clientItemDragDuration - Item drag duration
+  - id: Client.clientItemDragDuration
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # NOTE: ObjectDefinition expansion removed - all fields conflicted with existing mappings
+
+  # ==================== MORE ACTOR EXPANSION ====================
+
+  # actorCycleStart - Animation cycle start
+  - id: Actor.actorCycleStart
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorCycleEnd - Animation cycle end
+  - id: Actor.actorCycleEnd
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorFrame - Current animation frame
+  - id: Actor.actorFrame
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorFrameDelay - Frame delay counter
+  - id: Actor.actorFrameDelay
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorMovementFrame - Movement anim frame
+  - id: Actor.actorMovementFrame
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorMovementFrameDelay - Movement frame delay
+  - id: Actor.actorMovementFrameDelay
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # ==================== PUSH TO 270+ ====================
+
+  # clientViewportScale - Viewport scale
+  - id: Client.clientViewportScale
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientTickCount - Tick counter
+  - id: Client.clientTickCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # clientRunEnergy - Run energy value
+  - id: Client.clientRunEnergy
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSpecialAttackPercent - Special attack percentage
+  - id: Client.clientSpecialAttackPercent
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # clientOrbCount - Number of orbs
+  - id: Client.clientOrbCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientHealthMax - Max health value
+  - id: Client.clientHealthMax
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.6
+
+  # clientPrayerPoints - Prayer points
+  - id: Client.clientPrayerPoints
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientPrayerMax - Max prayer points
+  - id: Client.clientPrayerMax
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetDragDeadZone - Drag dead zone
+  - id: Widget.widgetDragDeadZone
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetDragDeadTime - Drag dead time
+  - id: Widget.widgetDragDeadTime
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetLineHeight - Line height
+  - id: Widget.widgetLineHeight
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetXTextAlignment - Text X alignment
+  - id: Widget.widgetXTextAlignment
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # widgetYTextAlignment - Text Y alignment
+  - id: Widget.widgetYTextAlignment
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorNextX - Next position X
+  - id: Actor.actorNextX
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorNextY - Next position Y
+  - id: Actor.actorNextY
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorIdlePoseAnimation - Idle pose animation
+  - id: Actor.actorIdlePoseAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorTurnLeftAnimation - Turn left animation
+  - id: Actor.actorTurnLeftAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.4
+      - kind: writeMin
+        min: 1
+        weight: 0.6
+
+  # actorTurnRightAnimation - Turn right animation
+  - id: Actor.actorTurnRightAnimation
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ============================================
+  # MEGA EXPANSION ROUND 2 - Pushing to 300+
+  # ============================================
+
+  # ---------- CLIENT EXPANSION ----------
+
+  # clientCameraSpeed - Camera movement speed
+  - id: Client.clientCameraSpeed
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientCameraAcceleration - Camera acceleration
+  - id: Client.clientCameraAcceleration
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientMinimapState - Minimap display state
+  - id: Client.clientMinimapState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientCompassState - Compass display state
+  - id: Client.clientCompassState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientChatboxState - Chatbox display state
+  - id: Client.clientChatboxState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientInterfaceScale - Interface scaling
+  - id: Client.clientInterfaceScale
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientDrawDistance - Draw distance setting
+  - id: Client.clientDrawDistance
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientResizableMode - Resizable mode flag
+  - id: Client.clientResizableMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientMusicVolume - Music volume setting
+  - id: Client.clientMusicVolume
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSoundVolume - Sound effects volume
+  - id: Client.clientSoundVolume
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientAreaSoundVolume - Area sound volume
+  - id: Client.clientAreaSoundVolume
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientScreenWidth - Screen width
+  - id: Client.clientScreenWidth
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientScreenHeight - Screen height
+  - id: Client.clientScreenHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientCanvasWidth - Canvas width
+  - id: Client.clientCanvasWidth
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientCanvasHeight - Canvas height
+  - id: Client.clientCanvasHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientCycleCount - Game cycle counter
+  - id: Client.clientCycleCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientLastCycle - Last cycle timestamp
+  - id: Client.clientLastCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSelectedWidgetId - Selected widget ID
+  - id: Client.clientSelectedWidgetId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSelectedWidgetIndex - Selected widget index
+  - id: Client.clientSelectedWidgetIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientDraggedWidgetId - Dragged widget ID
+  - id: Client.clientDraggedWidgetId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- ACTOR EXPANSION ----------
+
+  # actorActionFrame - Current action frame
+  - id: Actor.actorActionFrame
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorActionDelay - Action delay timer
+  - id: Actor.actorActionDelay
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorSpawnCycle - Spawn cycle time
+  - id: Actor.actorSpawnCycle
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorDeathCycle - Death cycle time
+  - id: Actor.actorDeathCycle
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorSpawnX - Spawn X coordinate
+  - id: Actor.actorSpawnX
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorSpawnY - Spawn Y coordinate
+  - id: Actor.actorSpawnY
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorMovementSpeed - Movement speed
+  - id: Actor.actorMovementSpeed
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorTurnDirection - Turn direction
+  - id: Actor.actorTurnDirection
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorLastX - Previous X position
+  - id: Actor.actorLastX
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # actorLastY - Previous Y position
+  - id: Actor.actorLastY
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- COLLISIONMAP EXPANSION ----------
+
+  # collisionFlags - Collision flags array
+  - id: CollisionMap.collisionFlags
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # collisionPlane - Collision plane level
+  - id: CollisionMap.collisionPlane
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionOffsetX - Collision offset X
+  - id: CollisionMap.collisionOffsetX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionOffsetY - Collision offset Y
+  - id: CollisionMap.collisionOffsetY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionTileCount - Number of collision tiles
+  - id: CollisionMap.collisionTileCount
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionBlockedCount - Blocked tile count
+  - id: CollisionMap.collisionBlockedCount
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- WIDGET EXPANSION ----------
+
+  # widgetTextureId - Widget texture ID
+  - id: Widget.widgetTextureId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetMediaId - Widget media/animation ID
+  - id: Widget.widgetMediaId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetSequenceId - Widget sequence ID
+  - id: Widget.widgetSequenceId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # widgetAnimationFrame - Widget animation frame
+  - id: Widget.widgetAnimationFrame
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- MODEL EXPANSION ----------
+
+  # modelMinX - Model minimum X bound
+  - id: Model.modelMinX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelMaxX - Model maximum X bound
+  - id: Model.modelMaxX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelMinY - Model minimum Y bound
+  - id: Model.modelMinY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelMaxY - Model maximum Y bound
+  - id: Model.modelMaxY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelMinZ - Model minimum Z bound
+  - id: Model.modelMinZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelMaxZ - Model maximum Z bound
+  - id: Model.modelMaxZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- PLAYER EXPANSION ----------
+
+  # playerNameIndex - Player name index
+  - id: Player.playerNameIndex
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # playerModelOffsetX - Model offset X
+  - id: Player.playerModelOffsetX
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # playerModelOffsetY - Model offset Y
+  - id: Player.playerModelOffsetY
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ============================================
+  # MEGA EXPANSION ROUND 3 - Pushing to 350+
+  # ============================================
+
+  # ---------- MORE COLLISIONMAP ----------
+
+  # collisionGridWidth - Grid width
+  - id: CollisionMap.collisionGridWidth
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionGridHeight - Grid height
+  - id: CollisionMap.collisionGridHeight
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionCenterX - Center X
+  - id: CollisionMap.collisionCenterX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionCenterY - Center Y
+  - id: CollisionMap.collisionCenterY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionMinX - Minimum X
+  - id: CollisionMap.collisionMinX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionMinY - Minimum Y
+  - id: CollisionMap.collisionMinY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionMaxX - Maximum X
+  - id: CollisionMap.collisionMaxX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionMaxY - Maximum Y
+  - id: CollisionMap.collisionMaxY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- MORE CLIENT ----------
+
+  # clientLoginIndex - Login index
+  - id: Client.clientLoginIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientWorldListSize - World list size
+  - id: Client.clientWorldListSize
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientChatMode - Chat mode
+  - id: Client.clientChatMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientTradeMode - Trade mode
+  - id: Client.clientTradeMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientPrivateChatMode - Private chat mode
+  - id: Client.clientPrivateChatMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientClanChatMode - Clan chat mode
+  - id: Client.clientClanChatMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientFriendsChatMode - Friends chat mode
+  - id: Client.clientFriendsChatMode
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientBrightness - Brightness setting
+  - id: Client.clientBrightness
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientAntiAliasing - Anti-aliasing setting
+  - id: Client.clientAntiAliasing
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientClickToContinue - Click to continue flag
+  - id: Client.clientClickToContinue
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientDialogId - Dialog ID
+  - id: Client.clientDialogId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- MORE MODEL ----------
+
+  # modelFaceCount - Number of faces
+  - id: Model.modelFaceCount
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelPriority - Render priority
+  - id: Model.modelPriority
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelAlpha - Alpha/transparency
+  - id: Model.modelAlpha
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ============================================
+  # FINAL PUSH - Targeting 350+
+  # ============================================
+
+  # ---------- FINAL CLIENT PUSH ----------
+
+  # clientSelectedObjectId - Selected object ID
+  - id: Client.clientSelectedObjectId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSelectedNpcIndex - Selected NPC index
+  - id: Client.clientSelectedNpcIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientSelectedPlayerIndex - Selected player index
+  - id: Client.clientSelectedPlayerIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientMapCenterX - Map center X
+  - id: Client.clientMapCenterX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientMapCenterY - Map center Y
+  - id: Client.clientMapCenterY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientLastMouseX - Last mouse X
+  - id: Client.clientLastMouseX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientLastMouseY - Last mouse Y
+  - id: Client.clientLastMouseY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # clientPendingInputLength - Pending input length
+  - id: Client.clientPendingInputLength
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- FINAL COLLISIONMAP PUSH ----------
+
+  # collisionLevel - Collision level
+  - id: CollisionMap.collisionLevel
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionRegionX - Region X
+  - id: CollisionMap.collisionRegionX
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionRegionY - Region Y
+  - id: CollisionMap.collisionRegionY
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # collisionTotalBlocked - Total blocked
+  - id: CollisionMap.collisionTotalBlocked
+    ownerTarget: CollisionMap
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- FINAL MODEL PUSH ----------
+
+  # modelScaleX - Scale X
+  - id: Model.modelScaleX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelScaleY - Scale Y
+  - id: Model.modelScaleY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelScaleZ - Scale Z
+  - id: Model.modelScaleZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelOffsetX - Offset X
+  - id: Model.modelOffsetX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelOffsetY - Offset Y
+  - id: Model.modelOffsetY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelOffsetZ - Offset Z
+  - id: Model.modelOffsetZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelRotationX - Rotation around X axis
+  - id: Model.modelRotationX
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelRotationY - Rotation around Y axis
+  - id: Model.modelRotationY
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelRotationZ - Rotation around Z axis
+  - id: Model.modelRotationZ
+    ownerTarget: Model
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # modelHeight/modelWidth - Removed, conflicted with modelVertexCount
+
+  # ==========================================
+  # ZERO-FIELD CLASS EXPANSION - 4 CLASSES
+  # Adding fields for Sprite, AbstractArchive, Cache, MouseHandler
+  # ==========================================
+
+  # ---------- SPRITE FIELDS (obf: am, 5 int fields) ----------
+  # No IMUL encoding in Sprite - use readMin only with higher weight
+  - id: Sprite.spriteWidth
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: Sprite.spriteHeight
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: Sprite.spriteOffsetX
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: Sprite.spriteOffsetY
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: Sprite.spriteMaxWidth
+    ownerTarget: Sprite
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ---------- ABSTRACTARCHIVE FIELDS (obf: bv, 22 int fields!) ----------
+  # No IMUL encoding - use readMin only
+  - id: AbstractArchive.archiveEntryCount
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 1.0
+
+  - id: AbstractArchive.archiveGroupCount
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 1.0
+
+  - id: AbstractArchive.archiveSize
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 1.0
+
+  - id: AbstractArchive.archiveVersion
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: AbstractArchive.archiveFlags
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: AbstractArchive.archiveIndex
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: AbstractArchive.archiveCrc
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: AbstractArchive.archiveCompression
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: AbstractArchive.archiveLoadPercent
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  - id: AbstractArchive.archiveFileCount
+    ownerTarget: AbstractArchive
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ---------- CACHE FIELDS (obf: ab, 3 int fields) ----------
+  # No IMUL encoding - use readMin only
+  - id: Cache.cacheCapacity
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: Cache.cacheSize
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: Cache.cacheRemaining
+    ownerTarget: Cache
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ---------- MOUSEHANDLER FIELDS (obf: bp, 16 int fields!) ----------
+  # No IMUL encoding - use readMin only with staggered thresholds
+  - id: MouseHandler.mouseX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 1.0
+
+  - id: MouseHandler.mouseY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 9
+        weight: 1.0
+
+  - id: MouseHandler.mouseClickX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 1.0
+
+  - id: MouseHandler.mouseClickY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 1.0
+
+  - id: MouseHandler.mouseClickCount
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 1.0
+
+  - id: MouseHandler.mouseLastX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: MouseHandler.mouseLastY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 1.0
+
+  - id: MouseHandler.mousePressedX
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: MouseHandler.mousePressedY
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 1.0
+
+  - id: MouseHandler.mousePressedTime
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: MouseHandler.mouseIdleTime
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: MouseHandler.mouseButton
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 1.0
+
+  - id: MouseHandler.mouseWheelRotation
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  - id: MouseHandler.mouseDragCycles
+    ownerTarget: MouseHandler
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 1.0
+
+  # ==========================================
+  # HIGH-POTENTIAL CLASS EXPANSION
+  # IterableNodeDeque: 22 int fields, only 3 mapped
+  # Node: 4 long fields, only 1 mapped
+  # GrandExchangeOffer: 9 int fields, 5 mapped
+  # SpotAnimation: 13 int fields, 8 mapped
+  # ==========================================
+
+  # ---------- ITERABLENODEDEQUE FIELDS (obf: oo, 22 int fields!) ----------
+  - id: IterableNodeDeque.dequeCount
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeCapacity
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeIndex
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeFront
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeRear
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeMaxSize
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeCursor
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeVersion
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- MORE ITERABLENODEDEQUE FIELDS ----------
+  - id: IterableNodeDeque.dequeModCount
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeIteratorIndex
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: IterableNodeDeque.dequeCurrentPosition
+    ownerTarget: IterableNodeDeque
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ---------- TEXTUREPROVIDER FIELDS ----------
+  # Removed - caused conflicts with existing textureSize rule
+
+  # ==============================================
+  # PUSH BEYOND 400 - Additional field rules
+  # ==============================================
+
+  # More Client boolean fields
+  - id: Client.clientResizable
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 25
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientInCutscene
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: Client.clientIsMember
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 35
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More Actor int array fields
+  - id: Actor.actorHitsplatDamage2
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: Actor.actorHitsplatSpecial
+    ownerTarget: Actor
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 7
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More Client int array fields
+  - id: Client.groundItemQuantities
+    ownerTarget: Client
+    desc: "[I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # Client.inventoryIds - Removed, no matching candidates
+
+  # More Client boolean fields
+  - id: Client.clientIsLowDetail
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 40
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientIsHd
+    ownerTarget: Client
+    desc: "Z"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 45
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # Client.sceneObjectIds/mapRegionIds - Removed, no matching candidates
+
+  # ==============================================
+  # PUSH TO 420+ - More expansion rules
+  # ==============================================
+
+  # More AnimationSequence int fields
+  - id: AnimationSequence.animationStretches
+    ownerTarget: AnimationSequence
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # animationResetWhenWalk/animationTweened - Removed, conflicted with existing rules
+
+  # More Projectile int fields
+  - id: Projectile.projectileStartX
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Projectile.projectileStartY
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 9
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Projectile.projectileStartZ
+    ownerTarget: Projectile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Actor int fields
+  - id: Actor.actorQueueLength
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 8
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Actor.actorMovementDelay
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 9
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Player int fields
+  - id: Player.playerSkullType
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 10
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Player.playerOverheadType
+    ownerTarget: Player
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 11
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More VarbitDefinition fields
+  - id: VarbitDefinition.varbitIndex
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 12
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: VarbitDefinition.varbitShift
+    ownerTarget: VarbitDefinition
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 13
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Widget fields
+  - id: Widget.widgetModelId
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 14
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Widget.widgetModelType
+    ownerTarget: Widget
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # ==============================================
+  # PUSH TO 425+ - Even more expansion
+  # ==============================================
+
+  # More GrandExchangeOffer fields
+  - id: GrandExchangeOffer.geOfferState
+    ownerTarget: GrandExchangeOffer
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 16
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Tile fields
+  - id: Tile.tilePlane
+    ownerTarget: Tile
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 20
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More TileModel fields
+  - id: TileModel.tileModelShape
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 22
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: TileModel.tileModelRotation
+    ownerTarget: TileModel
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 23
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More NPCDefinition fields
+  - id: NPCDefinition.npcDefinitionModels
+    ownerTarget: NPCDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: NPCDefinition.npcDefinitionColorFind
+    ownerTarget: NPCDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: NPCDefinition.npcDefinitionColorReplace
+    ownerTarget: NPCDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # More ItemDefinition int array fields
+  - id: ItemDefinition.itemDefinitionColorFind
+    ownerTarget: ItemDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: ItemDefinition.itemDefinitionColorReplace
+    ownerTarget: ItemDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # More ObjectDefinition int array fields
+  - id: ObjectDefinition.objectDefinitionModels
+    ownerTarget: ObjectDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: ObjectDefinition.objectDefinitionModelTypes
+    ownerTarget: ObjectDefinition
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # More Widget int array fields
+  - id: Widget.widgetItemIds
+    ownerTarget: Widget
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: Widget.widgetItemQuantities
+    ownerTarget: Widget
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # More SpotAnimation fields
+  - id: SpotAnimation.spotAnimationColorFind
+    ownerTarget: SpotAnimation
+    desc: "[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More TextureProvider fields
+  - id: TextureProvider.textureId
+    ownerTarget: TextureProvider
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More ItemDefinition boolean fields
+  - id: ItemDefinition.itemDefinitionPlaceholder
+    ownerTarget: ItemDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More NPCDefinition boolean fields
+  - id: NPCDefinition.npcDefinitionVisible
+    ownerTarget: NPCDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More ObjectDefinition boolean fields
+  - id: ObjectDefinition.objectDefinitionIsRotated
+    ownerTarget: ObjectDefinition
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More Client long fields
+  - id: Client.clientSeed
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  # More Client int fields with high reads
+  - id: Client.clientHintArrowZ
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 50
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientCameraPosX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 51
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientCameraPosY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 52
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Actor int fields
+  - id: Actor.actorDefaultHeight
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 30
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Actor.actorLogicalHeight
+    ownerTarget: Actor
+    desc: "I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 31
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Client int fields
+  - id: Client.clientCameraPosZ
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 53
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientOrbX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 54
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientOrbY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 55
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More CollisionMap int fields
+  - id: CollisionMap.collisionData
+    ownerTarget: CollisionMap
+    desc: "[[I"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 15
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # More Client int fields
+  - id: Client.clientMenuScroll
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 56
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientQueueLength
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 57
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Client int fields continued
+  - id: Client.clientMouseCrossState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 58
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientMouseIdleTime
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 59
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 60
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientMapRegionX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 61
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientMapRegionY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 62
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientRenderFlags
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 63
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Client int fields batch 3
+  - id: Client.clientHitsplatCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 64
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientObjectCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 65
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientProjectileCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 66
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientGraphicsObjectCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 67
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientItemCount
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 68
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientWidgetRoot
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 69
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientTabHoverIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 70
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientPendingLevel
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 71
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Client int fields batch 4
+  - id: Client.clientWorldId
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 72
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientConnectionState
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 73
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientServerTick
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 74
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientQueueIndex
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 75
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientAnimationFrameCache
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 76
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # More Client int fields batch 5
+  - id: Client.clientSceneOffsetX
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 77
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientSceneOffsetY
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 78
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientInputType
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 79
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientCameraFollowHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 80
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientMoveSpeed
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 81
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientLastLoginDay
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 82
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientChatboxWidth
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 83
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientChatboxHeight
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 84
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # Strategy: Very high readMin (100+) for extremely hot fields
+  - id: Client.clientLoopCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 100
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientFrameTime
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 110
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientRenderCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 120
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientUpdateCycle
+    ownerTarget: Client
+    desc: "I"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 130
+        weight: 0.5
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.5
+
+  # Strategy: Client long fields (J)
+  - id: Client.clientSessionId
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 2
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: Client.clientServerTime
+    ownerTarget: Client
+    desc: "J"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  # Strategy: Client String arrays
+  - id: Client.clientChatMessages
+    ownerTarget: Client
+    desc: "[Ljava/lang/String;"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 5
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+  - id: Client.clientPlayerNames
+    ownerTarget: Client
+    desc: "[Ljava/lang/String;"
+    isStatic: true
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 6
+        weight: 0.5
+      - kind: writeMin
+        min: 3
+        weight: 0.5
+
+  # Strategy: Player boolean fields
+  - id: Player.playerIsHidden
+    ownerTarget: Player
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 3
+        weight: 0.5
+      - kind: writeMin
+        min: 1
+        weight: 0.5
+
+  - id: Player.playerIsFemale
+    ownerTarget: Player
+    desc: "Z"
+    isStatic: false
+    threshold: 0.40
+    signals:
+      - kind: readMin
+        min: 4
+        weight: 0.5
+      - kind: writeMin
+        min: 2
+        weight: 0.5
+
+
+
+
+

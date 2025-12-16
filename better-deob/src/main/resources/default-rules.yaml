@@ -1,0 +1,42 @@
+thresholdDefault: 0.90
+
+classRules:
+  - id: Example_AnchorLike
+    type: class
+    minMethodDescCounts:
+      "()V": 1
+    signals:
+      - kind: minLdcStrings
+        min: 25
+        weight: 0.25
+      - kind: minLdcNumbers
+        min: 40
+        weight: 0.25
+      - kind: opcode3GramHashEq
+        value: "0x0"
+        weight: 0.25
+      - kind: fieldPattern
+        value: "I|* * GETFIELD * IADD * *"
+        min: 5
+        weight: 0.25
+
+fieldRules:
+  - id: "Example_AnchorLike.exampleInt"
+    ownerTarget: "Example_AnchorLike"
+    desc: "I"
+    threshold: 0.90
+    isStatic: false
+    signals:
+      - kind: readMin
+        min: 1
+        weight: 0.25
+      - kind: writeMin
+        min: 1
+        weight: 0.25
+      - kind: fieldPattern
+        value: "I|* * GETFIELD * IMUL * *"
+        min: 1
+        weight: 0.25
+      - kind: intMultiplierConstAny
+        min: 1
+        weight: 0.25

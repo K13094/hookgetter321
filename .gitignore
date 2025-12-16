@@ -6,5 +6,7 @@ gluetun/
 # Environment secrets
 .env
 
-# BetterDeob tool (copy separately)
-better-deob/
+# BetterDeob build artifacts only
+better-deob/.gradle/
+better-deob/build/
+better-deob/out/
