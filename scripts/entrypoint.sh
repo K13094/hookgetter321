@@ -22,33 +22,68 @@ run_check() {
     NEW_SHA=$(sha256sum /app/data/gamepack.jar | cut -d' ' -f1)
     OLD_SHA=$(cat /app/data/gamepack.sha256 2>/dev/null || echo "none")
 
-    echo "[HOOK-SERVICE] Current SHA: ${OLD_SHA:0:16}..."
-    echo "[HOOK-SERVICE] New SHA:     ${NEW_SHA:0:16}..."
+    echo "[HOOK-SERVICE] Gamepack - Current: ${OLD_SHA:0:16}... New: ${NEW_SHA:0:16}..."
+
+    # Step 3: Fetch rules from GitHub and check if changed
+    RULES_URL="https://raw.githubusercontent.com/K13094/hookgetter321/main/rules/osrs-rules.yaml"
+    RULES_FILE="/app/data/osrs-rules.yaml"
+
+    echo "[HOOK-SERVICE] Fetching rules from GitHub..."
+    curl -sL -o "$RULES_FILE" "$RULES_URL"
+
+    if [ -f "$RULES_FILE" ] && [ -s "$RULES_FILE" ]; then
+        NEW_RULES_SHA=$(sha256sum "$RULES_FILE" | cut -d' ' -f1)
+        OLD_RULES_SHA=$(cat /app/data/rules.sha256 2>/dev/null || echo "none")
+        echo "[HOOK-SERVICE] Rules - Current: ${OLD_RULES_SHA:0:16}... New: ${NEW_RULES_SHA:0:16}..."
+    else
+        NEW_RULES_SHA="fetch_failed"
+        OLD_RULES_SHA="fetch_failed"
+        echo "[HOOK-SERVICE] WARNING: Failed to fetch rules from GitHub"
+    fi
+
+    # Run deob if EITHER gamepack OR rules changed
+    GAMEPACK_CHANGED="no"
+    RULES_CHANGED="no"
 
     if [ "$NEW_SHA" != "$OLD_SHA" ]; then
+        GAMEPACK_CHANGED="yes"
+    fi
+
+    if [ "$NEW_RULES_SHA" != "$OLD_RULES_SHA" ] && [ "$NEW_RULES_SHA" != "fetch_failed" ]; then
+        RULES_CHANGED="yes"
+    fi
+
+    if [ "$GAMEPACK_CHANGED" = "yes" ] || [ "$RULES_CHANGED" = "yes" ]; then
         echo ""
-        echo "[HOOK-SERVICE] *** GAMEPACK CHANGED! Running deobfuscation... ***"
+        if [ "$GAMEPACK_CHANGED" = "yes" ] && [ "$RULES_CHANGED" = "yes" ]; then
+            echo "[HOOK-SERVICE] *** GAMEPACK AND RULES CHANGED! Running deobfuscation... ***"
+        elif [ "$GAMEPACK_CHANGED" = "yes" ]; then
+            echo "[HOOK-SERVICE] *** GAMEPACK CHANGED! Running deobfuscation... ***"
+        else
+            echo "[HOOK-SERVICE] *** RULES CHANGED! Running deobfuscation... ***"
+        fi
         echo ""
 
-        # Step 3: Clean up old deob output (hooks.json stays until replaced)
+        # Clean up old deob output (hooks.json stays until replaced)
         echo "[HOOK-SERVICE] Cleaning up old deob output..."
         rm -rf /app/output/*
 
-        # Step 4: Run deobfuscation
+        # Run deobfuscation (uses rules already downloaded to /app/data)
         /app/scripts/run-deob.sh
 
-        # Step 5: Convert to hooks.json format
+        # Convert to hooks.json format
         /app/scripts/convert-hooks.sh
 
-        # Step 6: Save new SHA
+        # Save new SHAs
         echo "$NEW_SHA" > /app/data/gamepack.sha256
+        echo "$NEW_RULES_SHA" > /app/data/rules.sha256
 
         echo ""
         echo "[HOOK-SERVICE] *** UPDATE COMPLETE! ***"
         echo "[HOOK-SERVICE] hooks.json available at: /app/data/hooks.json"
         echo ""
     else
-        echo "[HOOK-SERVICE] No changes detected."
+        echo "[HOOK-SERVICE] No changes detected (gamepack and rules unchanged)."
     fi
 }
 
