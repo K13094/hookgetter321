@@ -4,6 +4,7 @@
 
 CLASSES_FILE="/app/output/mapping_classes.json"
 FIELDS_FILE="/app/output/mapping_fields.json"
+MULTIPLIERS_FILE="/app/output/mapping_multipliers.json"
 OUTPUT_FILE="/app/data/hooks.json"
 TEMP_OUTPUT="/app/data/hooks_temp.json"
 
@@ -31,11 +32,19 @@ if [ ! -f "$FIELDS_FILE" ]; then
     exit 1
 fi
 
+# Multipliers file is optional but expected
+if [ ! -f "$MULTIPLIERS_FILE" ]; then
+    echo "[CONVERT] WARNING: Missing $MULTIPLIERS_FILE - multipliers will be empty"
+    echo "{}" > "$MULTIPLIERS_FILE"
+fi
+
 CLASSES_SIZE=$(stat -c%s "$CLASSES_FILE" 2>/dev/null || echo "0")
 FIELDS_SIZE=$(stat -c%s "$FIELDS_FILE" 2>/dev/null || echo "0")
+MULTIPLIERS_SIZE=$(stat -c%s "$MULTIPLIERS_FILE" 2>/dev/null || echo "0")
 
 echo "[CONVERT] mapping_classes.json: $CLASSES_SIZE bytes"
 echo "[CONVERT] mapping_fields.json: $FIELDS_SIZE bytes"
+echo "[CONVERT] mapping_multipliers.json: $MULTIPLIERS_SIZE bytes"
 
 # Validate input JSON files
 echo ""
@@ -57,11 +66,21 @@ if ! jq empty "$FIELDS_FILE" 2>/dev/null; then
 fi
 echo "[CONVERT] mapping_fields.json: Valid JSON"
 
+if ! jq empty "$MULTIPLIERS_FILE" 2>/dev/null; then
+    echo "[CONVERT] ERROR: mapping_multipliers.json is not valid JSON!"
+    echo "[CONVERT] Contents:"
+    head -20 "$MULTIPLIERS_FILE"
+    exit 1
+fi
+echo "[CONVERT] mapping_multipliers.json: Valid JSON"
+
 # Count items in input files
 INPUT_CLASS_COUNT=$(jq 'keys | length' "$CLASSES_FILE" 2>/dev/null || echo "0")
 INPUT_FIELD_COUNT=$(jq 'keys | length' "$FIELDS_FILE" 2>/dev/null || echo "0")
+INPUT_MULTIPLIER_COUNT=$(jq 'keys | length' "$MULTIPLIERS_FILE" 2>/dev/null || echo "0")
 echo "[CONVERT] Input classes: $INPUT_CLASS_COUNT"
 echo "[CONVERT] Input fields: $INPUT_FIELD_COUNT"
+echo "[CONVERT] Input multipliers: $INPUT_MULTIPLIER_COUNT"
 
 # Generate hooks.json
 echo ""
@@ -70,12 +89,14 @@ echo "[CONVERT] === GENERATING HOOKS.JSON ==="
 jq -n \
   --slurpfile classes "$CLASSES_FILE" \
   --slurpfile fields "$FIELDS_FILE" \
+  --slurpfile multipliers "$MULTIPLIERS_FILE" \
   '{
     revision: 0,
     timestamp: (now * 1000 | floor),
     discoveredBy: "BetterDeob-Container",
     classes: $classes[0],
-    fields: $fields[0]
+    fields: $fields[0],
+    multipliers: $multipliers[0]
   }' > "$TEMP_OUTPUT"
 
 JQ_EXIT=$?
@@ -105,6 +126,7 @@ echo "[CONVERT] Output JSON is valid"
 # Count items in output
 OUTPUT_CLASS_COUNT=$(jq '.classes | keys | length' "$TEMP_OUTPUT" 2>/dev/null || echo "0")
 OUTPUT_FIELD_COUNT=$(jq '.fields | keys | length' "$TEMP_OUTPUT" 2>/dev/null || echo "0")
+OUTPUT_MULTIPLIER_COUNT=$(jq '.multipliers | keys | length' "$TEMP_OUTPUT" 2>/dev/null || echo "0")
 OUTPUT_SIZE=$(stat -c%s "$TEMP_OUTPUT" 2>/dev/null || echo "0")
 
 # Verify counts match input
@@ -114,6 +136,10 @@ fi
 
 if [ "$OUTPUT_FIELD_COUNT" != "$INPUT_FIELD_COUNT" ]; then
     echo "[CONVERT] WARNING: Output field count ($OUTPUT_FIELD_COUNT) != input count ($INPUT_FIELD_COUNT)"
+fi
+
+if [ "$OUTPUT_MULTIPLIER_COUNT" != "$INPUT_MULTIPLIER_COUNT" ]; then
+    echo "[CONVERT] WARNING: Output multiplier count ($OUTPUT_MULTIPLIER_COUNT) != input count ($INPUT_MULTIPLIER_COUNT)"
 fi
 
 # Move temp to final
@@ -137,6 +163,7 @@ echo "[CONVERT] HOOKS.JSON GENERATED SUCCESSFULLY!"
 echo "[CONVERT] =============================================="
 echo "[CONVERT] Classes: $OUTPUT_CLASS_COUNT"
 echo "[CONVERT] Fields: $OUTPUT_FIELD_COUNT"
+echo "[CONVERT] Multipliers: $OUTPUT_MULTIPLIER_COUNT"
 echo "[CONVERT] File size: $FINAL_SIZE bytes"
 echo "[CONVERT] Location: $OUTPUT_FILE"
 echo "[CONVERT] =============================================="

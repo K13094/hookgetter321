@@ -18,13 +18,15 @@ display_hooks_stats() {
         echo "[HOOKS] =============================================="
         echo "[HOOKS] HOOKS.JSON STATISTICS"
 
-        # Count classes and fields using jq
+        # Count classes, fields and multipliers using jq
         CLASS_COUNT=$(jq '.classes | keys | length' /app/data/hooks.json 2>/dev/null || echo "?")
         FIELD_COUNT=$(jq '.fields | keys | length' /app/data/hooks.json 2>/dev/null || echo "?")
+        MULTIPLIER_COUNT=$(jq '.multipliers | keys | length' /app/data/hooks.json 2>/dev/null || echo "?")
         FILE_SIZE=$(stat -c%s /app/data/hooks.json 2>/dev/null || echo "?")
 
         echo "[HOOKS] Classes identified: $CLASS_COUNT"
         echo "[HOOKS] Fields identified: $FIELD_COUNT"
+        echo "[HOOKS] Multipliers identified: $MULTIPLIER_COUNT"
         echo "[HOOKS] File size: $FILE_SIZE bytes"
         echo "[HOOKS] Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
         echo "[HOOKS] =============================================="
