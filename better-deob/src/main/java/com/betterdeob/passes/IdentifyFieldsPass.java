@@ -42,9 +42,12 @@ public final class IdentifyFieldsPass implements Pass {
                 if (!ok) continue;
             }
 
+            // Translate descriptor if it contains semantic class references
+            String translatedDesc = translateDescriptor(fr.desc, report);
+
             List<FieldFeatures> fields = idx.fieldsOf(ownerObf);
             for (FieldFeatures ff : fields) {
-                if (!ff.desc().equals(fr.desc)) continue;
+                if (!ff.desc().equals(translatedDesc)) continue;
 
                 if (fr.isStatic != null && ff.isStatic() != fr.isStatic) continue;
                 if (fr.accessMaskAll != null && (ff.access() & fr.accessMaskAll) != fr.accessMaskAll) continue;
@@ -78,7 +81,8 @@ public final class IdentifyFieldsPass implements Pass {
                 Integer multiplier = extractDominantMultiplier(ff);
 
                 String obfFieldKey = ownerObf + "." + ff.name() + ":" + ff.desc();
-                candidates.add(new MatchResult(fr.id, obfFieldKey, score, ev, multiplier));
+                int priority = (fr.priority != null) ? fr.priority : 0;
+                candidates.add(new MatchResult(fr.id, obfFieldKey, score, priority, ev, multiplier));
             }
         }
 
@@ -90,6 +94,52 @@ public final class IdentifyFieldsPass implements Pass {
 
         System.out.println("Identified fields: " + report.fieldMappings().size());
         System.out.println("Unresolved fields: " + report.unresolvedFieldTargets().size());
+    }
+
+    /**
+     * Translates semantic class names in descriptors to their obfuscated equivalents.
+     * Examples:
+     *   "Lclient/Player;" -> "Labc;" (if Player maps to abc)
+     *   "[Lclient/Player;" -> "[Labc;"
+     *   "[[Lclient/Player;" -> "[[Labc;"
+     *   "I" -> "I" (primitives unchanged)
+     */
+    private static String translateDescriptor(String desc, MappingReport report) {
+        if (desc == null || desc.isEmpty()) return desc;
+
+        // Count leading array brackets
+        int arrayDepth = 0;
+        while (arrayDepth < desc.length() && desc.charAt(arrayDepth) == '[') {
+            arrayDepth++;
+        }
+
+        String rest = desc.substring(arrayDepth);
+
+        // Check if it's an object type (L...;)
+        if (rest.startsWith("L") && rest.endsWith(";")) {
+            String className = rest.substring(1, rest.length() - 1);
+
+            // Try to find a mapping for this class
+            // First, try direct lookup (e.g., "Player")
+            String obf = report.classMappings().get(className);
+
+            // If not found, try stripping common prefixes (e.g., "client/Player" -> "Player")
+            if (obf == null && className.contains("/")) {
+                String simpleClassName = className.substring(className.lastIndexOf('/') + 1);
+                obf = report.classMappings().get(simpleClassName);
+            }
+
+            if (obf != null) {
+                // Build translated descriptor with array brackets
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < arrayDepth; i++) sb.append('[');
+                sb.append('L').append(obf).append(';');
+                return sb.toString();
+            }
+        }
+
+        // No translation needed or mapping not found
+        return desc;
     }
 
     /**

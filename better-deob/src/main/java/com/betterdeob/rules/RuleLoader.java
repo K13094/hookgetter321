@@ -73,6 +73,9 @@ public final class RuleLoader {
                 Object thr = m.get("threshold");
                 if (thr instanceof Number n) fr.threshold = n.doubleValue();
 
+                Object priority = m.get("priority");
+                if (priority instanceof Number n) fr.priority = n.intValue();
+
                 Object isStatic = m.get("isStatic");
                 if (isStatic instanceof Boolean b) fr.isStatic = b;
 

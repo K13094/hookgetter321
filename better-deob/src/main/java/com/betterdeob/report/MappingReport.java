@@ -11,6 +11,7 @@ public final class MappingReport {
     private final Map<String, Object> evidence = new LinkedHashMap<>();
     private final List<String> unresolvedTargets = new ArrayList<>();
     private final List<String> unresolvedFieldTargets = new ArrayList<>();
+    private final List<Map<String, Object>> conflicts = new ArrayList<>();
 
     public Map<String, String> classMappings() { return classMappings; }
     public Map<String, String> fieldMappings() { return fieldMappings; }
@@ -18,6 +19,7 @@ public final class MappingReport {
     public Map<String, Object> evidence() { return evidence; }
     public List<String> unresolvedTargets() { return unresolvedTargets; }
     public List<String> unresolvedFieldTargets() { return unresolvedFieldTargets; }
+    public List<Map<String, Object>> conflicts() { return conflicts; }
 
     public void putClass(String target, String obf, double confidence, List<String> ev) {
         classMappings.put(target, obf);
@@ -57,6 +59,25 @@ public final class MappingReport {
         meta.put("reason", reason);
         meta.put("evidence", m.evidence());
         rej.add(meta);
+    }
+
+    public void addConflict(String obfField, List<MatchResult> candidates, MatchResult winner, String reason) {
+        Map<String, Object> conflict = new LinkedHashMap<>();
+        conflict.put("obfField", obfField);
+
+        List<Map<String, Object>> competingTargets = new ArrayList<>();
+        for (MatchResult m : candidates) {
+            Map<String, Object> c = new LinkedHashMap<>();
+            c.put("target", m.targetName());
+            c.put("confidence", m.confidence());
+            competingTargets.add(c);
+        }
+        conflict.put("competingTargets", competingTargets);
+        conflict.put("winner", winner != null ? winner.targetName() : null);
+        conflict.put("reason", reason);
+
+        conflicts.add(conflict);
+        evidence.put("conflicts", conflicts);
     }
 
     private static Map<String, Object> meta(String obf, double confidence, List<String> ev) {

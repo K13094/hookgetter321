@@ -27,6 +27,7 @@ public final class FieldRule {
     public String desc;           // e.g., "I"
 
     public Double threshold;      // optional override
+    public Integer priority;      // optional: higher priority wins conflicts (default 0)
 
     public Boolean isStatic;      // optional
     public Integer accessMaskAll; // optional
