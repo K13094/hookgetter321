@@ -40,7 +40,7 @@ for i in $(seq 1 $MAX_RETRIES); do
 done
 
 GAMEPACK_URL="${CODEBASE}${INITIAL_JAR}"
-TEMP_GAMEPACK="/app/data/gamepack_new_$(date +%s).jar"
+TEMP_GAMEPACK="/app/data/gamepack_temp.jar"
 
 # Show old gamepack info before anything
 if [ -f "$GAMEPACK_PATH" ]; then
@@ -51,36 +51,52 @@ else
     echo "[DOWNLOAD] No existing gamepack found"
 fi
 
-# Download to temp file first (fresh download, no overwrite issues)
-echo "[DOWNLOAD] Fetching gamepack from: $GAMEPACK_URL"
-echo "[DOWNLOAD] Downloading to temp file: $TEMP_GAMEPACK"
+# Clean up any previous temp file
+rm -f "$TEMP_GAMEPACK"
 
-curl -sL \
-    -H "Cache-Control: no-cache, no-store, must-revalidate" \
-    -H "Pragma: no-cache" \
-    -H "Expires: 0" \
-    -H "If-None-Match: \"dummy\"" \
-    -H "If-Modified-Since: Thu, 01 Jan 1970 00:00:00 GMT" \
-    --connect-timeout 10 \
-    --max-time 120 \
-    -o "$TEMP_GAMEPACK" \
-    "$GAMEPACK_URL"
-
-CURL_EXIT=$?
-echo "[DOWNLOAD] curl exit code: $CURL_EXIT"
-
-if [ ! -f "$TEMP_GAMEPACK" ]; then
-    echo "[DOWNLOAD] ERROR: Temp file not created"
-    exit 1
+# Check if data directory exists and is writable
+echo "[DOWNLOAD] Checking /app/data directory..."
+ls -la /app/data/ | head -5
+if [ ! -d "/app/data" ]; then
+    echo "[DOWNLOAD] ERROR: /app/data does not exist!"
+    mkdir -p /app/data
 fi
 
-NEW_SIZE=$(stat -c%s "$TEMP_GAMEPACK" 2>/dev/null || stat -f%z "$TEMP_GAMEPACK" 2>/dev/null)
+# Download to temp file first
+echo "[DOWNLOAD] Fetching gamepack from: $GAMEPACK_URL"
+echo "[DOWNLOAD] Downloading to: $TEMP_GAMEPACK"
+
+curl -v -L \
+    -H "Cache-Control: no-cache" \
+    --connect-timeout 30 \
+    --max-time 180 \
+    -o "$TEMP_GAMEPACK" \
+    "$GAMEPACK_URL" 2>&1 | tail -20
+
+CURL_EXIT=${PIPESTATUS[0]}
+echo "[DOWNLOAD] curl exit code: $CURL_EXIT"
+
+# Debug: show what's in data dir now
+echo "[DOWNLOAD] Contents of /app/data after curl:"
+ls -la /app/data/
+
+if [ ! -f "$TEMP_GAMEPACK" ]; then
+    echo "[DOWNLOAD] ERROR: Temp file not created at $TEMP_GAMEPACK"
+    echo "[DOWNLOAD] Trying alternate download method..."
+    wget -O "$TEMP_GAMEPACK" "$GAMEPACK_URL" 2>&1 || true
+    ls -la /app/data/
+    if [ ! -f "$TEMP_GAMEPACK" ]; then
+        echo "[DOWNLOAD] ERROR: wget also failed"
+        exit 1
+    fi
+fi
+
+NEW_SIZE=$(stat -c%s "$TEMP_GAMEPACK" 2>/dev/null || stat -f%z "$TEMP_GAMEPACK" 2>/dev/null || echo "0")
 echo "[DOWNLOAD] Downloaded temp file: ${NEW_SIZE} bytes"
 
 if [ "$NEW_SIZE" -lt 1000 ]; then
     echo "[DOWNLOAD] ERROR: Downloaded file too small (${NEW_SIZE} bytes)"
-    echo "[DOWNLOAD] File contents:"
-    head -5 "$TEMP_GAMEPACK"
+    cat "$TEMP_GAMEPACK" 2>/dev/null | head -10
     rm -f "$TEMP_GAMEPACK"
     exit 1
 fi
@@ -91,7 +107,6 @@ echo "[DOWNLOAD] New gamepack SHA: ${NEW_SHA:0:16}..."
 # Now delete old and move new into place
 echo "[DOWNLOAD] Replacing old gamepack..."
 rm -f "$GAMEPACK_PATH"
-rm -f /app/data/gamepack_new_*.jar 2>/dev/null  # Clean up any old temp files
 mv "$TEMP_GAMEPACK" "$GAMEPACK_PATH"
 sync
 
